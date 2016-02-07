@@ -26,7 +26,7 @@ public class ElevatorSimulation extends Application
     root = FXMLLoader.load(getClass().getClassLoader().getResource("elevatorsimulation/Views/SimulationMenuWindow.fxml"));
     
     Scene scene = new Scene(root);
-    System.out.println("Testing");
+
     stage.setScene(scene);
     stage.show();
   }

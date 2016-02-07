@@ -1,7 +1,6 @@
 package elevatorsimulation.Model;
 
-import jdk.internal.org.objectweb.asm.tree.analysis.Value;
-
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,13 +45,50 @@ public class FloorRequest {
 
         for(Map.Entry<Integer, Elevator> entry : this.elevatorBank.getElevators().entrySet()) {
             if(entry.getValue().getElevatorState() == ElevatorState.STAND) {
-                return entry.getValue();
+                return findClosestStandElevator(this.elevatorBank);
             } else if (this.currentFloor == entry.getValue().getDestinationFloor()) {
                 return entry.getValue();
             }
 
         }
         return findLowestCapacityElevator(this.elevatorBank);
+    }
+
+
+    private Elevator findClosestStandElevator(ElevatorBank elevatorBank) {
+        //
+        ArrayList<Elevator> standingElevators = new ArrayList<>();
+        for (Map.Entry<Integer, Elevator> entry : this.elevatorBank.getElevators().entrySet()) {
+            if (entry.getValue().getElevatorState() == ElevatorState.STAND) {
+                standingElevators.add(entry.getValue());
+
+
+            }
+
+        }
+
+        int closestFloor = 0;
+        Elevator closestElevator = null;
+
+        for (Elevator standingElevator : standingElevators) {
+            // if the elevator in question is at this floor... obviously this must be the closest.
+            if (standingElevator.getCurrentFloor() == this.currentFloor) {
+                return standingElevator;
+            }
+
+            closestElevator = standingElevator;
+            // compute the distance from this floor to the elevator in question
+            int floorDistance = closestElevator.getCurrentFloor().getFloorLevel() - this.currentFloor.getFloorLevel();
+            if (closestElevator.getCurrentFloor().getFloorLevel() < closestFloor) {
+                closestElevator = standingElevator;
+                closestFloor = floorDistance;
+            }
+
+
+            return closestElevator;
+
+        }
+        return null;
     }
 
     private Elevator findLowestCapacityElevator(ElevatorBank elevatorBank) {

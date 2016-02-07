@@ -2,9 +2,6 @@ package elevatorsimulation.Model;
 
 import elevatorsimulation.Exceptions.BuildingFloorValueNotFoundException;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-
 /**
  * Created by andrewlincoln on 1/30/16.
  */

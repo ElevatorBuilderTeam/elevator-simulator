@@ -1,6 +1,5 @@
 package elevatorsimulation.Model;
 
-import com.sun.java.swing.action.SaveAction;
 
 /**
  * Created by andrewlincoln on 1/30/16.
@@ -12,12 +11,11 @@ public class BuildingScenario {
 
     private ElevatorSimulationGraph elevatorSimulatorGraph;
 
-    public BuildingScenario(int numberOfPassengers, int numberOfFloors, int numberOfElevatorBanks, StringBuilder scenarioName, ElevatorSimulationGraph elevatorSimulatorGraph) {
+    public BuildingScenario(int numberOfPassengers, int numberOfFloors, int numberOfElevatorBanks, String scenarioName, ElevatorSimulationGraph elevatorSimulatorGraph) {
         this.numberOfPassengers = numberOfPassengers;
         this.numberOfFloors = numberOfFloors;
         this.numberOfElevatorBanks = numberOfElevatorBanks;
-        this.scenarioName = scenarioName;
-        this.elevatorSimulatorGraph = elevatorSimulatorGraph
-        ;
+        this.scenarioName = new StringBuilder(scenarioName);
+        this.elevatorSimulatorGraph = elevatorSimulatorGraph;
     }
 }
