@@ -29,8 +29,6 @@ public abstract class Controller {
 
         try {
             root = loader.load();
-            loader.<Controller>getController().parentController = this;
-
 
             Stage stage = new Stage();
             stage.setTitle("Simulation Editor");
@@ -43,5 +41,9 @@ public abstract class Controller {
         }
     }
 
+    public void initWithParent(Controller controller) {
+        this.parentController = controller;
+
+    }
 
 }

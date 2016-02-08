@@ -5,5 +5,4 @@ package elevatorsimulation.Model;
  */
 public enum FloorState {
     ACCESSIBLE, MAINTENANCE, VIP
-
 }

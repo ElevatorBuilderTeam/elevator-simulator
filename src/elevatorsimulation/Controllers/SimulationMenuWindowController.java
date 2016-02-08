@@ -3,18 +3,12 @@
  */
 package elevatorsimulation.Controllers;
 
-import elevatorsimulation.Model.Building;
-import elevatorsimulation.Model.BuildingVisitor;
-import elevatorsimulation.Model.ElevatorSimulationGraph;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.MenuItem;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 /**
@@ -25,14 +19,6 @@ import java.util.ResourceBundle;
 public class SimulationMenuWindowController extends Controller implements Initializable {
 
   public MenuItem simulationEditorOption;
-  public LineChart elevatorChart;
-  public CategoryAxis timeAxis;
-  public NumberAxis floorAxis;
-  private ElevatorSimulationGraph elevatorSimulationGraph;
-
-
-  ArrayList<BuildingVisitor> visitors = new ArrayList<BuildingVisitor>();
-  Building testBuilding = new Building(10,10,visitors);
 
   int number = 5;
   /**
@@ -40,9 +26,6 @@ public class SimulationMenuWindowController extends Controller implements Initia
    */
   @Override
   public void initialize(URL url, ResourceBundle rb) {
-    // TODO
-
-    elevatorSimulationGraph = new ElevatorSimulationGraph(elevatorChart, floorAxis, timeAxis);
 
   }  
   
@@ -62,12 +45,16 @@ public class SimulationMenuWindowController extends Controller implements Initia
     });
   }
 
+
+  public void runSimulationClicked(ActionEvent actionEvent) {
+
+    System.out.println("Clicked");
+
+  }
+
   public void exitMenuOptionClicked() {
     System.exit(0);
   }
 
-  public ElevatorSimulationGraph getElevatorSimulationGraph() {
-    return elevatorSimulationGraph;
-  }
 
 }

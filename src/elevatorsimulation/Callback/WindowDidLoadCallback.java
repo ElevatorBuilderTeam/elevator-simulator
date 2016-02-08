@@ -7,5 +7,5 @@ import javafx.fxml.FXMLLoader;
  */
 public interface WindowDidLoadCallback {
 
-    public void runCallBack(FXMLLoader loader);
+    void runCallBack(FXMLLoader loader);
 }

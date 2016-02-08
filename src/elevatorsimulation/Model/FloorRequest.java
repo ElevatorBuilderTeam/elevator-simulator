@@ -22,11 +22,9 @@ public class FloorRequest {
 
     }
 
-
     public void callNextAvailableElevator(int floorDestination) {
 
         nextAvailableElevator = findAvailableElevator();
-
         nextAvailableElevator.moveTo(floorDestination);
     }
 
@@ -84,9 +82,7 @@ public class FloorRequest {
                 closestFloor = floorDistance;
             }
 
-
             return closestElevator;
-
         }
         return null;
     }
@@ -108,6 +104,5 @@ public class FloorRequest {
         }
         return lowestCapacityElevator;
     }
-
 
 }

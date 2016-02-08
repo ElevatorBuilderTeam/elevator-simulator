@@ -9,27 +9,17 @@ public class BuildingFloor {
 
     private int floorLevel, accessCode;
     private FloorState floorState;
-
+    private ElevatorBank elevatorBank;
 
     private StringBuilder floorName;
-    private ElevatorBank elevatorBank;
+
 
 
     public BuildingFloor(int floorLevel, int accessCode) {
         this.floorLevel = floorLevel;
         this.accessCode = accessCode;
+        this.floorName = updateFloorName(floorLevel);
 
-        switch ( floorLevel ) {
-            case 0:
-                floorName = new StringBuilder("Garage");
-                break;
-            case 1:
-                floorName = new StringBuilder("Lobby");
-                break;
-            default:
-                floorName = new StringBuilder("Floor " + floorLevel);
-                break;
-        }
     }
 
 
@@ -43,6 +33,21 @@ public class BuildingFloor {
     public void allowAccess(int accessCode) {
         if (this.accessCode == accessCode) {
             //allow acess
+        }
+    }
+
+    private StringBuilder updateFloorName(int floorLevel) {
+
+        switch (floorLevel) {
+            case 0:
+                return new StringBuilder("Garage");
+
+            case 1:
+                return new StringBuilder("Lobby");
+
+            default:
+                return new StringBuilder("Floor " + floorLevel);
+
         }
     }
 

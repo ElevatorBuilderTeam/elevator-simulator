@@ -8,17 +8,30 @@ import javafx.scene.chart.NumberAxis;
  * Created by andrewlincoln on 1/30/16.
  */
 public class ElevatorSimulationGraph {
-    int time, floor;
-    LineChart<Integer, Integer > chart;
-    NumberAxis floorAxis;
-    CategoryAxis timeAxis;
+
+    // Not sure if we need these.
+    private LineChart<Integer, Integer> chart;
+    private NumberAxis floorAxis;
+    private CategoryAxis timeAxis;
+    private BuildingScenario buildingScenario;
+    private int maxY, xBounds;
 
 
-    public ElevatorSimulationGraph(LineChart chart, NumberAxis floorAxis, CategoryAxis timeAxis) {
-        this.chart = chart;
-        this.floorAxis = floorAxis;
-        this.timeAxis = timeAxis;
+    public ElevatorSimulationGraph() {
+
     }
 
+    //GETTERS
 
+
+    public int getMaxY() {
+        return maxY;
+    }
+
+    public void setBuildingScenario(BuildingScenario buildingScenario) {
+        this.buildingScenario = buildingScenario;
+
+        this.maxY = buildingScenario.getNumberOfFloors();
+
+    }
 }
