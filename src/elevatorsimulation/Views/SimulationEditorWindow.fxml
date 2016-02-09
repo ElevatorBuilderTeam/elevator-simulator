@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
+
 <AnchorPane id="AnchorPane" prefHeight="433.0" prefWidth="689.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="elevatorsimulation.Controllers.SimulationEditorWindowController">
    <children>
-      <ListView fx:id="scenarioListView" layoutX="14.0" layoutY="37.0" prefHeight="206.0" prefWidth="188.0"/>
-      <TextField fx:id="scenarioName" layoutX="195.0" layoutY="250.0"/>
+      <ListView fx:id="scenarioListView" layoutX="14.0" layoutY="37.0" prefHeight="206.0" prefWidth="188.0" />
+      <TextField fx:id="scenarioName" layoutX="195.0" layoutY="250.0" />
       <Label layoutX="65.0" layoutY="255.0" text="Scenario Name" textAlignment="CENTER" />
-      <TextField fx:id="numOfPassengers" layoutX="195.0" layoutY="286.0" prefHeight="27.0" prefWidth="46.0"/>
+      <TextField fx:id="numOfPassengers" layoutX="195.0" layoutY="286.0" prefHeight="27.0" prefWidth="46.0" />
       <Label layoutX="33.0" layoutY="291.0" text="Number Of Passengers" />
       <Label layoutX="14.0" layoutY="327.0" text="Number Of Elevator Banks" />
-      <TextField fx:id="numOfElevatorBanks" layoutX="195.0" layoutY="322.0" prefHeight="27.0" prefWidth="46.0"/>
-      <Button layoutX="553.0" layoutY="50.0" mnemonicParsing="false" onAction="#runScenarioClicked" text="Run Scenario"
-              textFill="#4870c7"/>
-      <TextField fx:id="numOfFloors" layoutX="195.0" layoutY="359.0" prefHeight="27.0" prefWidth="46.0"/>
+      <TextField fx:id="numOfElevatorBanks" layoutX="195.0" layoutY="322.0" prefHeight="27.0" prefWidth="46.0" />
+      <Button layoutX="553.0" layoutY="50.0" mnemonicParsing="false" onAction="#runScenarioClicked" text="Run Scenario" textFill="#4870c7" />
+      <TextField fx:id="numOfFloors" layoutX="195.0" layoutY="359.0" prefHeight="27.0" prefWidth="46.0" />
       <Label layoutX="65.0" layoutY="364.0" text="Number Of Floors" />
       <Button layoutX="279.0" layoutY="381.0" mnemonicParsing="false" text="Save Scenarios" textFill="#242524" />
-      <Button layoutX="398.0" layoutY="381.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="125.0" text="Load Scenarios" textFill="#252525" />
-      <Button layoutX="279.0" layoutY="336.0" mnemonicParsing="false" onAction="#addScenarioClicked" text="Add Scenario"
-              textFill="#15ab82"/>
-      <Button layoutX="392.0" layoutY="336.0" mnemonicParsing="false" onAction="#removeScenarioClicked"
-              text="Remove Scenario" textFill="#ab1616"/>
+      <Button layoutX="398.0" layoutY="381.0" mnemonicParsing="false" onAction="#loadScenarioClicked" prefHeight="27.0" prefWidth="125.0" text="Load Scenarios" textFill="#252525" />
+      <Button layoutX="279.0" layoutY="336.0" mnemonicParsing="false" onAction="#addScenarioClicked" text="Add Scenario" textFill="#15ab82" />
+      <Button layoutX="392.0" layoutY="336.0" mnemonicParsing="false" onAction="#removeScenarioClicked" text="Remove Scenario" textFill="#ab1616" />
    </children>
 </AnchorPane>
