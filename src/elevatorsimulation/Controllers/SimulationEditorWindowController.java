@@ -15,6 +15,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 
+import javax.swing.*;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -156,21 +158,22 @@ public class SimulationEditorWindowController extends Controller implements Init
     }
 
 
-    public void loadScenarioClicked() {
+    public void loadScenarioClicked(ActionEvent e) throws IOException {
         // TODO: 2/9/15 figure out path to where scenarios will be saved on HDD.
 
         String os = System.getProperty("os.name").toLowerCase();
         boolean win = os.indexOf("win") >= 0;
+        String path = System.getProperty("this").toLowerCase();
 
-        try {
-            if(win == true)
-                Runtime.getRuntime().exec("explorer.exe /select, path");
-            else{
-                Runtime.getRuntime().exec("open, path");
+        System.out.println(path);
+       // if(win == true){
+            try {
+                java.awt.Desktop.getDesktop().open(new File("C:/Users/brigg/OneDrive/Documents/ThisFile.txt"));
+            } catch (IOException e1) {
+                e1.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+       // }
+
     }
 }
 
