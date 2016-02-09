@@ -10,10 +10,12 @@ import elevatorsimulation.Model.BuildingScenarioManager;
 import elevatorsimulation.Model.ElevatorSimulationGraph;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -21,6 +23,7 @@ import java.util.ResourceBundle;
  * FXML Controller class
  *
  * @author andrewlincoln
+ * @author andrewbriggs
  */
 public class SimulationEditorWindowController extends Controller implements Initializable {
 
@@ -75,6 +78,7 @@ public class SimulationEditorWindowController extends Controller implements Init
         }
 
     }
+
 
     public void removeScenarioClicked(ActionEvent actionEvent) {
         // TODO: 2/7/2016 remove scenario remove the highlighted scenario from the list
@@ -151,6 +155,23 @@ public class SimulationEditorWindowController extends Controller implements Init
         }
     }
 
+
+    public void loadScenarioClicked() {
+        // TODO: 2/9/15 figure out path to where scenarios will be saved on HDD.
+
+        String os = System.getProperty("os.name").toLowerCase();
+        boolean win = os.indexOf("win") >= 0;
+
+        try {
+            if(win == true)
+                Runtime.getRuntime().exec("explorer.exe /select, path");
+            else{
+                Runtime.getRuntime().exec("open, path");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
 
 

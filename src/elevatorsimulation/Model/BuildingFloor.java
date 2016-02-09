@@ -32,7 +32,7 @@ public class BuildingFloor {
 
     public void allowAccess(int accessCode) {
         if (this.accessCode == accessCode) {
-            //allow acess
+            //allow access
         }
     }
 
