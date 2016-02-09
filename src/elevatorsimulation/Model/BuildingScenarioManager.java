@@ -1,6 +1,7 @@
 package elevatorsimulation.Model;
 
 import elevatorsimulation.Callback.CompletionHandler;
+import elevatorsimulation.Exceptions.ScenarioAlreadyExistsException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.stage.FileChooser;
@@ -51,9 +52,23 @@ public class BuildingScenarioManager {
     }
 
 
-    public void saveScenario(String name, BuildingScenario buildingScenario) {
-        buildingScenarios.put(new StringBuilder(name), buildingScenario );
-        scenarioEntries.add(buildingScenario.getScenarioEntryText().toString());
+    public void addScenario(String scenarioName, BuildingScenario buildingScenario) {
+
+        if(!scenarioExists(scenarioName)) {
+            buildingScenarios.put(new StringBuilder(scenarioName), buildingScenario);
+            scenarioEntries.add(buildingScenario.getScenarioEntryText().toString());
+            return;
+        }
+
+        try {
+            throw new ScenarioAlreadyExistsException();
+        } catch (ScenarioAlreadyExistsException e) {
+            System.out.println("Scenario Already Exists");
+        }
+
+    }
+
+    public void saveScenario() {
 
     }
 
@@ -69,6 +84,18 @@ public class BuildingScenarioManager {
 
     public void runScenario() {
 
+    }
+
+    public boolean scenarioExists(String scenarioName) {
+        for (Map.Entry<StringBuilder, BuildingScenario> entries : buildingScenarios.entrySet()) {
+            if (scenarioName.equalsIgnoreCase(entries.getKey().toString())) {
+
+                return true;
+
+            }
+        }
+
+        return false;
     }
 
 

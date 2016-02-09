@@ -64,7 +64,7 @@ public class SimulationEditorWindowController extends Controller implements Init
 
             ElevatorSimulationGraph elevatorSimulationGraph = new ElevatorSimulationGraph();
 
-            buildingScenarioManager.saveScenario(scenarioName, new BuildingScenario(numOfPassengers, numOfFloors, numOfElevatorBanks, scenarioName, elevatorSimulationGraph));
+            buildingScenarioManager.addScenario(scenarioName, new BuildingScenario(numOfPassengers, numOfFloors, numOfElevatorBanks, scenarioName, elevatorSimulationGraph));
 
             // update the scenario list
             scenarioListView.setItems(buildingScenarioManager.getScenarioEntries());
