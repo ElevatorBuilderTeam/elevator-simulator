@@ -19,13 +19,14 @@ public abstract class Controller {
     protected Controller parentController;
 
 
+
     // Load a window on top of it's parent window
     public void loadWindow(String resource, WindowDidLoadCallback callback) {
 
         Region root;
 
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("elevatorsimulation/Views/" + resource + ".fxml"));
 
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("elevatorsimulation/Views/" + resource + ".fxml"));
 
         try {
             root = loader.load();
@@ -33,17 +34,20 @@ public abstract class Controller {
             Stage stage = new Stage();
             stage.setTitle("Simulation Editor");
             stage.setScene(new Scene(root));
+            stage.setResizable(false);
 
-            callback.runCallBack(loader);
+            callback.runCallBack(loader, stage);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     public void initWithParent(Controller controller) {
         this.parentController = controller;
 
     }
+
 
 }

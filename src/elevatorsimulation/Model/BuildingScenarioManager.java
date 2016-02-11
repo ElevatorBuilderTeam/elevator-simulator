@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.stage.FileChooser;
 
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ import java.util.Map;
 
 // This is a singleton That will asychronously query the data storage load scenario
 // This class is to handle all the saving and loading of a scenario.
-public class BuildingScenarioManager {
+public class BuildingScenarioManager implements Serializable {
 
     private static BuildingScenarioManager scenarioManager = null;
     private HashMap<StringBuilder, BuildingScenario> buildingScenarios;
@@ -51,6 +52,37 @@ public class BuildingScenarioManager {
         return null;
     }
 
+    public void loadScenariosFromFile(File selectedFile, boolean shouldClearList, CompletionHandler completionHandler) {
+
+        HashMap<StringBuilder, BuildingScenario> tempScenarios = null;
+        try {
+            FileInputStream fileInputStream = new FileInputStream(selectedFile);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+
+
+            this.scenarioEntries.removeAll();
+            this.buildingScenarios.clear();
+
+
+            tempScenarios = (HashMap<StringBuilder, BuildingScenario>) objectInputStream.readObject();
+            this.buildingScenarios.putAll(tempScenarios);
+
+
+            for (Map.Entry<StringBuilder, BuildingScenario> entries : this.buildingScenarios.entrySet()) {
+                this.scenarioEntries.add(entries.getKey().toString());
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        completionHandler.completed();
+
+
+    }
+
 
     public void addScenario(String scenarioName, BuildingScenario buildingScenario) {
 
@@ -68,18 +100,29 @@ public class BuildingScenarioManager {
 
     }
 
-    public void saveScenario() {
+    public void saveScenarioToFile(File newFile) {
+        try {
+
+            FileOutputStream fileOutputStream = new FileOutputStream(newFile);
+            ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream);
+
+            outputStream.writeObject(this.buildingScenarios);
+            outputStream.close();
+            fileOutputStream.close();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
     }
 
     public void removeScenario(String scenarioName, CompletionHandler handler) {
-        for (Map.Entry<StringBuilder, BuildingScenario> entries : buildingScenarios.entrySet()) {
-            if (scenarioName.equalsIgnoreCase(entries.getKey().toString())) {
 
-                buildingScenarios.remove(entries.getKey());
+        buildingScenarios.remove(scenarioName);
                 handler.completed();
-            }
-        }
+
     }
 
     public void runScenario() {
@@ -89,16 +132,10 @@ public class BuildingScenarioManager {
     public boolean scenarioExists(String scenarioName) {
         for (Map.Entry<StringBuilder, BuildingScenario> entries : buildingScenarios.entrySet()) {
             if (scenarioName.equalsIgnoreCase(entries.getKey().toString())) {
-
                 return true;
-
             }
         }
-
         return false;
     }
-
-
-
 
 }

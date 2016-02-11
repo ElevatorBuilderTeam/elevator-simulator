@@ -1,12 +1,13 @@
 package elevatorsimulation.Model;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by andrewlincoln on 1/30/16.
  */
-public class BuildingScenario {
+public class BuildingScenario implements Serializable {
 
     private int numberOfPassengers, numberOfFloors, numberOfElevatorBanks;
     private StringBuilder scenarioName;

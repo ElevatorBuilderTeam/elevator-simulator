@@ -4,10 +4,12 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 
+import java.io.Serializable;
+
 /**
  * Created by andrewlincoln on 1/30/16.
  */
-public class ElevatorSimulationGraph {
+public class ElevatorSimulationGraph implements Serializable {
 
     // Not sure if we need these.
     private LineChart<Integer, Integer> chart;

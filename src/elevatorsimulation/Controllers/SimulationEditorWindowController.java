@@ -10,12 +10,10 @@ import elevatorsimulation.Model.BuildingScenarioManager;
 import elevatorsimulation.Model.ElevatorSimulationGraph;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -36,6 +34,9 @@ public class SimulationEditorWindowController extends Controller implements Init
     public TextField numOfFloors;
 
     public ListView scenarioListView;
+    public AnchorPane anchorPane;
+    public Label scenarioFileName;
+    public CheckBox appendScenriosCheckBox;
 
     private BuildingScenario buildingScenario;
     private BuildingScenarioManager buildingScenarioManager;
@@ -62,9 +63,9 @@ public class SimulationEditorWindowController extends Controller implements Init
 
         try {
 
-            int numOfFloors = new Integer(this.numOfFloors.getText()).intValue();
-            int numOfPassengers = new Integer(this.numOfPassengers.getText()).intValue();
-            int numOfElevatorBanks = new Integer(this.numOfElevatorBanks.getText()).intValue();
+            int numOfFloors = Integer.parseInt(this.numOfFloors.getText());
+            int numOfPassengers = Integer.parseInt(this.numOfPassengers.getText());
+            int numOfElevatorBanks = Integer.parseInt(this.numOfElevatorBanks.getText());
             String scenarioName = this.scenarioName.getText();
 
             ElevatorSimulationGraph elevatorSimulationGraph = new ElevatorSimulationGraph();
@@ -73,6 +74,8 @@ public class SimulationEditorWindowController extends Controller implements Init
 
             // update the scenario list
             scenarioListView.setItems(buildingScenarioManager.getScenarioEntries());
+
+            clearData();
 
         } catch (NumberFormatException e) {
             System.out.println("Number format exception or elevator not found");
@@ -112,7 +115,7 @@ public class SimulationEditorWindowController extends Controller implements Init
             BuildingScenario tempScenario = buildingScenarioManager.loadScenario(scenarioToBeLoaded);
             ElevatorSimulationGraph scenarioElevatorGraph = tempScenario.getElevatorSimulatorGraph();
 
-            loadWindow("SimulationElevatorGraphWindow", loader -> {
+            loadWindow("SimulationElevatorGraphWindow", (loader, stage) -> {
                 loader.<SimulationElevatorGraphController>getController().initWithParent(this, scenarioElevatorGraph);
 
             });
@@ -157,24 +160,81 @@ public class SimulationEditorWindowController extends Controller implements Init
         }
     }
 
+    public void saveScenariosClicked(ActionEvent actionEvent) {
+
+        if (buildingScenarioManager.getScenarioEntries().isEmpty()) {
+            return;
+
+        }
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save your ELE File");
+
+        fileChooser.setInitialFileName("mysavedscenario.ele");
+        File newFile = fileChooser.showSaveDialog(null);
+        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("ELE files", "*.ele"));
+
+        //check if the user used the .ele extension
+        // if not, remove any '.' characters and add the .ele
+
+        //write to the file
+        buildingScenarioManager.saveScenarioToFile(newFile);
+
+    }
+
 
     public void loadScenarioClicked(ActionEvent e) throws IOException {
         // TODO: 2/9/15 figure out path to where scenarios will be saved on HDD.
 
-        String os = System.getProperty("os.name").toLowerCase();
-        boolean win = os.indexOf("win") >= 0;
-        String path = System.getProperty("this").toLowerCase();
+        FileChooser fileChooser = new FileChooser();
+        File selectedFile = fileChooser.showOpenDialog(null);
 
-        System.out.println(path);
-       // if(win == true){
-            try {
-                java.awt.Desktop.getDesktop().open(new File("C:/Users/brigg/OneDrive/Documents/ThisFile.txt"));
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-       // }
+        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("ELE files", "*.ele"));
+
+
+        // load the file if it's there already.
+
+        // File file = null;
+        // PrintWriter writer = new PrintWriter(new PrintWriter("testFile.ele", "UTF-8"));
+
+
+        if (selectedFile != null && isCorrectFileExtension(selectedFile)) {
+
+            buildingScenarioManager.loadScenariosFromFile(selectedFile, appendScenriosCheckBox.isSelected(), () -> {
+
+                scenarioListView.setItems(buildingScenarioManager.getScenarioEntries());
+
+            });
+
+            scenarioFileName.setText(selectedFile.getName());
+        }
+
 
     }
+
+
+    private boolean isCorrectFileExtension(File selectedFile) {
+        // file must end with extension .ele
+
+        int postionOfDot = selectedFile.getName().length() - 4;
+        System.out.println(selectedFile.getName().substring(postionOfDot));
+        if (selectedFile.getName().substring(postionOfDot).equalsIgnoreCase(".ele")) {
+
+            return true;
+        }
+
+        scenarioFileName.setText("Cannot Read File ");
+        return false;
+
+    }
+
+
+    public void clearData() {
+        this.numOfElevatorBanks.setText("");
+        this.numOfFloors.setText("");
+        this.numOfFloors.setText("");
+    }
+
 }
 
 

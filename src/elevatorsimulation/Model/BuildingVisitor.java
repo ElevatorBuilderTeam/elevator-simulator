@@ -1,11 +1,12 @@
 package elevatorsimulation.Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by andrewlincoln on 1/31/16.
  */
-public class BuildingVisitor {
+public class BuildingVisitor implements Serializable {
     int averageTimeOnFloor;
     ArrayList<FloorRequest> floorRequests;
 

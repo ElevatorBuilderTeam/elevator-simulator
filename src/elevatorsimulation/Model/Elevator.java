@@ -2,10 +2,12 @@ package elevatorsimulation.Model;
 
 import elevatorsimulation.Exceptions.BuildingFloorValueNotFoundException;
 
+import java.io.Serializable;
+
 /**
  * Created by andrewlincoln on 1/30/16.
  */
-public class Elevator {
+public class Elevator implements Serializable {
 
     private BuildingFloor currentFloor, destinationFloor, maxFloor;
     public int currentCapacity, maxCapacity, speed, maxSpeed;

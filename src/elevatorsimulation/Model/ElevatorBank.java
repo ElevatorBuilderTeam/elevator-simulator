@@ -1,11 +1,12 @@
 package elevatorsimulation.Model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
  * Created by andrewlincoln on 1/30/16.
  */
-public class ElevatorBank {
+public class ElevatorBank implements Serializable {
     private HashMap<Integer, Elevator> elevators;
     private int numberOfFloors;
     private StringBuilder bankID;

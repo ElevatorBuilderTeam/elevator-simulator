@@ -2,23 +2,20 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane id="AnchorPane" prefHeight="621.0" prefWidth="883.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="elevatorsimulation.Controllers.SimulationMenuWindowController">
+<?import javafx.scene.text.Font?>
+<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="80.0" prefWidth="243.0" xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="elevatorsimulation.Controllers.SimulationMenuWindowController">
     <children>
-        <MenuBar prefHeight="29.0" prefWidth="883.0">
+        <MenuBar prefHeight="29.0" prefWidth="243.0">
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#exitMenuOptionClicked" text="Exit" />
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="Delete" />
-                    </items>
-                </Menu>
                 <Menu mnemonicParsing="false" text="Simulation">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Run Simulation" />
                         <MenuItem fx:id="simulationEditorOption" mnemonicParsing="false" onAction="#simulationEditorOptionClicked" text="Simulation Editor" />
                     </items>
                 </Menu>
@@ -29,8 +26,11 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <Button layoutX="732.0" layoutY="521.0" mnemonicParsing="false" text="View Simulation Log"/>
-        <Button layoutX="625.0" layoutY="521.0" mnemonicParsing="false" onAction="#runSimulationClicked"
-                text="Run Simulation"/>
+        <Label layoutX="42.0" layoutY="32.0" prefHeight="17.0" prefWidth="160.0" text="JElevator"
+               textAlignment="CENTER">
+            <font>
+                <Font size="36.0"/>
+            </font>
+        </Label>
     </children>
 </AnchorPane>

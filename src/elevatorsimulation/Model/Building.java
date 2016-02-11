@@ -1,12 +1,13 @@
 package elevatorsimulation.Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
  * Created by andrewlincoln on 1/31/16.
  */
-public class Building {
+public class Building implements Serializable {
 
     private ArrayList<BuildingVisitor> buildingVisitors;
     private HashMap<Integer,BuildingFloor> buildingFloors;

@@ -28,6 +28,7 @@ public class ElevatorSimulation extends Application
     Scene scene = new Scene(root);
 
     stage.setScene(scene);
+    stage.setResizable(false);
     stage.show();
   }
 

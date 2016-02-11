@@ -1,5 +1,6 @@
 package elevatorsimulation.Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,7 +8,7 @@ import java.util.Map;
 /**
  * Created by andrewlincoln on 1/30/16.
  */
-public class FloorRequest {
+public class FloorRequest implements Serializable {
     HashMap<Integer, BuildingFloor> destinations;
     private ElevatorBank elevatorBank;
     private BuildingFloor currentFloor;

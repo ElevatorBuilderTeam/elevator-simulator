@@ -3,10 +3,9 @@
  */
 package elevatorsimulation.Controllers;
 
-import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuItem;
+import javafx.scene.layout.AnchorPane;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -19,38 +18,42 @@ import java.util.ResourceBundle;
 public class SimulationMenuWindowController extends Controller implements Initializable {
 
   public MenuItem simulationEditorOption;
+  public AnchorPane anchorPane;
+  private boolean editorWindowOpened = false;
 
-  int number = 5;
   /**
    * Initializes the controller class.
    */
+
   @Override
   public void initialize(URL url, ResourceBundle rb) {
 
-  }  
+
+  }
   
   public void simulationEditorOptionClicked() {
     // push the editor window on top of the frame.
-    this.loadWindow("SimulationEditorWindow", (FXMLLoader loader) -> {
+    if (editorWindowOpened) {
+      return;
+    }
+    this.loadWindow("SimulationEditorWindow", (loader, stage) -> {
       loader.<SimulationEditorWindowController>getController().initWithParent(this);
-
+      editorWindowOpened = true;
+      stage.setOnCloseRequest((event) -> {
+        editorWindowOpened = false;
+      });
     });
   }
 
   public void simulationAnimationOptionClicked() {
 
-    this.loadWindow("SimulationAnimationWindow", (FXMLLoader loader) -> {
+
+    this.loadWindow("SimulationAnimationWindow", (loader, stage) -> {
 
 
     });
   }
 
-
-  public void runSimulationClicked(ActionEvent actionEvent) {
-
-    System.out.println("Clicked");
-
-  }
 
   public void exitMenuOptionClicked() {
     System.exit(0);
