@@ -26,7 +26,7 @@ public class BuildingScenarioManager implements Serializable {
 
     protected BuildingScenarioManager() {
         buildingScenarios = new HashMap<StringBuilder, BuildingScenario>();
-        // TODO: 2/7/2016 load scenarios from disk
+
     }
 
     public static BuildingScenarioManager getDefaultManager() {
@@ -86,7 +86,7 @@ public class BuildingScenarioManager implements Serializable {
 
     public void addScenario(String scenarioName, BuildingScenario buildingScenario) {
 
-        if(!scenarioExists(scenarioName)) {
+        if (!scenarioExists(scenarioName)) {
             buildingScenarios.put(new StringBuilder(scenarioName), buildingScenario);
             scenarioEntries.add(buildingScenario.getScenarioEntryText().toString());
             return;
@@ -121,7 +121,7 @@ public class BuildingScenarioManager implements Serializable {
     public void removeScenario(String scenarioName, CompletionHandler handler) {
 
         buildingScenarios.remove(scenarioName);
-                handler.completed();
+        handler.completed();
 
     }
 

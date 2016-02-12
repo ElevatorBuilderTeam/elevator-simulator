@@ -17,6 +17,7 @@ import javafx.stage.FileChooser;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.InputMismatchException;
 import java.util.ResourceBundle;
 
 /**
@@ -37,6 +38,7 @@ public class SimulationEditorWindowController extends Controller implements Init
     public AnchorPane anchorPane;
     public Label scenarioFileName;
     public CheckBox appendScenriosCheckBox;
+    public Label warningTextLabel;
 
     private BuildingScenario buildingScenario;
     private BuildingScenarioManager buildingScenarioManager;
@@ -63,10 +65,10 @@ public class SimulationEditorWindowController extends Controller implements Init
 
         try {
 
-            int numOfFloors = Integer.parseInt(this.numOfFloors.getText());
-            int numOfPassengers = Integer.parseInt(this.numOfPassengers.getText());
-            int numOfElevatorBanks = Integer.parseInt(this.numOfElevatorBanks.getText());
-            String scenarioName = this.scenarioName.getText();
+            int numOfFloors = Integer.parseInt(removeWhiteSpaceFromString(this.numOfFloors.getText()));
+            int numOfPassengers = Integer.parseInt(removeWhiteSpaceFromString(this.numOfPassengers.getText()));
+            int numOfElevatorBanks = Integer.parseInt(removeWhiteSpaceFromString(this.numOfElevatorBanks.getText()));
+            String scenarioName = removeWhiteSpaceFromString(this.scenarioName.getText());
 
             ElevatorSimulationGraph elevatorSimulationGraph = new ElevatorSimulationGraph();
 
@@ -75,35 +77,24 @@ public class SimulationEditorWindowController extends Controller implements Init
             // update the scenario list
             scenarioListView.setItems(buildingScenarioManager.getScenarioEntries());
 
-            clearData();
+            hideWarning();
 
         } catch (NumberFormatException e) {
-            System.out.println("Number format exception or elevator not found");
-            // TODO: 2/7/2016 when user doesn't enter an integer it causes this exception, show a label to help them input the correct data.
+            showWarning();
         }
-
+        clearData();
     }
 
 
     public void removeScenarioClicked(ActionEvent actionEvent) {
-        // TODO: 2/7/2016 remove scenario remove the highlighted scenario from the list
 
-        // locate the highlighted scenario
-        // remove it from 2 locations
-        // the list
-        // the manager
-        //check to see if item is selected
         if (!scenarioListView.getSelectionModel().isEmpty()) {
-
             findNameForScenario(scenarioListView, true);
-
         }
-
     }
 
     public void runScenarioClicked(ActionEvent actionEvent) {
         // TODO: 2/7/2016 implement algorithm for run scenario
-
 
         // find the selected scenario
         // get the simulationGraph associated with it
@@ -184,7 +175,7 @@ public class SimulationEditorWindowController extends Controller implements Init
 
 
     public void loadScenarioClicked(ActionEvent e) throws IOException {
-        // TODO: 2/9/15 figure out path to where scenarios will be saved on HDD.
+
 
         FileChooser fileChooser = new FileChooser();
         File selectedFile = fileChooser.showOpenDialog(null);
@@ -228,13 +219,43 @@ public class SimulationEditorWindowController extends Controller implements Init
 
     }
 
-
-    public void clearData() {
-        this.numOfElevatorBanks.setText("");
-        this.numOfFloors.setText("");
-        this.numOfFloors.setText("");
+    private void showWarning() {
+        warningTextLabel.setText("Entries must be integer values");
     }
 
+    private void hideWarning() {
+        warningTextLabel.setText("");
+    }
+
+    private void clearData() {
+        this.numOfElevatorBanks.setText("");
+        this.numOfFloors.setText("");
+        this.numOfPassengers.setText("");
+        this.scenarioName.setText("");
+    }
+
+    private String removeWhiteSpaceFromString(String string) {
+        StringBuilder stringBuilder = new StringBuilder(string);
+        if (stringBuilder.charAt(0) != ' ') {
+            return stringBuilder.toString();
+        }
+        for (int i = 0; i < stringBuilder.length(); i++) {
+            if (stringBuilder.charAt(i) == ' ') {
+
+
+                stringBuilder.deleteCharAt(i);
+                return removeWhiteSpaceFromString(stringBuilder.toString());
+            }
+        }
+
+        throw new InputMismatchException();
+
+    }
+
+
+    private void setMaxSizeOfTextFields() {
+
+    }
 }
 
 

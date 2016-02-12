@@ -9,10 +9,10 @@
    <children>
       <ListView fx:id="scenarioListView" layoutX="14.0" layoutY="37.0" prefHeight="206.0" prefWidth="188.0" />
       <TextField fx:id="scenarioName" layoutX="195.0" layoutY="250.0" />
-      <Label layoutX="85.0" layoutY="255.0" text="Scenario Name" textAlignment="CENTER"/>
+      <Label fx:id="warningTextLabel" layoutX="46.0" layoutY="400.0" textAlignment="CENTER" textFill="#d71111"/>
       <TextField fx:id="numOfPassengers" layoutX="195.0" layoutY="286.0" prefHeight="27.0" prefWidth="46.0" />
       <Label fx:id="scenarioInformation" layoutX="242.0" layoutY="42.0"/>
-      <Label layoutX="16.0" layoutY="327.0" text="Number Of Elevator Banks"/>
+      <Label layoutX="26.0" layoutY="327.0" text="Number Of Elevator Banks"/>
       <TextField fx:id="numOfElevatorBanks" layoutX="195.0" layoutY="322.0" prefHeight="27.0" prefWidth="46.0" />
       <Button layoutX="553.0" layoutY="50.0" mnemonicParsing="false" onAction="#runScenarioClicked" text="Run Scenario" textFill="#4870c7" />
       <TextField fx:id="numOfFloors" layoutX="195.0" layoutY="359.0" prefHeight="27.0" prefWidth="46.0" />
@@ -29,8 +29,9 @@
             <Font size="14.0"/>
          </font>
       </Label>
-      <Label layoutX="62.0" layoutY="291.0" text="Visitors Per Minute" textAlignment="CENTER"/>
+      <Label layoutX="68.0" layoutY="291.0" text="Visitors Per Minute" textAlignment="CENTER"/>
       <CheckBox fx:id="appendScenriosCheckBox" layoutX="535.0" layoutY="386.0" mnemonicParsing="false"
                 text="Append Scenarios"/>
+      <Label layoutX="85.0" layoutY="254.0" text="Scenario Name"/>
    </children>
 </AnchorPane>
