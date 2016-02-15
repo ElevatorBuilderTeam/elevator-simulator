@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane fx:controller="elevatorsimulation.Controllers.SimulationScenarioAddOnController" maxHeight="-Infinity"
-            maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="242.0" prefWidth="600.0"
-            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-    <children>
-        <CheckBox layoutX="308.0" layoutY="52.0" mnemonicParsing="false" text="Visitors Count Reaches "/>
-        <Label layoutX="46.0" layoutY="42.0" text="Average Time On Floor"/>
-        <Label layoutX="41.0" layoutY="69.0" text="Average Time In Building"/>
-        <Label layoutX="28.0" layoutY="95.0" text="Speed Of Elevator Per Floor"/>
-        <Label layoutX="40.0" layoutY="122.0" text="Elevator Door Time Delay"/>
-        <Label layoutX="392.0" layoutY="25.0" text="Stop Simulation When "/>
-        <CheckBox layoutX="359.0" layoutY="87.0" mnemonicParsing="false" text="Time Reaches"/>
-        <TextField layoutX="206.0" layoutY="38.0" prefHeight="25.0" prefWidth="49.0"/>
-        <TextField layoutX="206.0" layoutY="65.0" prefHeight="25.0" prefWidth="49.0"/>
-        <TextField layoutX="206.0" layoutY="118.0" prefHeight="25.0" prefWidth="49.0"/>
-        <TextField layoutX="206.0" layoutY="91.0" prefHeight="25.0" prefWidth="49.0"/>
-        <TextField layoutX="465.0" layoutY="48.0" prefHeight="25.0" prefWidth="49.0"/>
-        <TextField layoutX="465.0" layoutY="83.0" prefHeight="25.0" prefWidth="49.0"/>
-    </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="242.0"
+            prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="elevatorsimulation.Controllers.SimulationScenarioAddOnController">
+   <children>
+      <CheckBox layoutX="308.0" layoutY="52.0" mnemonicParsing="false" text="Visitors Count Reaches "/>
+      <Label layoutX="46.0" layoutY="42.0" text="Average Time On Floor"/>
+      <Label layoutX="41.0" layoutY="69.0" text="Average Time In Building"/>
+      <Label layoutX="28.0" layoutY="95.0" text="Speed Of Elevator Per Floor"/>
+      <Label layoutX="40.0" layoutY="122.0" text="Elevator Door Time Delay"/>
+      <Label layoutX="392.0" layoutY="25.0" text="Stop Simulation When "/>
+      <CheckBox layoutX="359.0" layoutY="87.0" mnemonicParsing="false" text="Time Reaches"/>
+      <TextField fx:id="averageTimeOnFloor" layoutX="206.0" layoutY="38.0" prefHeight="25.0" prefWidth="49.0"/>
+      <TextField fx:id="averageTimeInBuilding" layoutX="206.0" layoutY="65.0" prefHeight="25.0" prefWidth="49.0"/>
+      <TextField fx:id="elevatorDoorTimeDelay" layoutX="206.0" layoutY="118.0" prefHeight="25.0" prefWidth="49.0"/>
+      <TextField fx:id="speedOfElevatorPerFloor" layoutX="206.0" layoutY="91.0" prefHeight="25.0" prefWidth="49.0"/>
+      <TextField layoutX="465.0" layoutY="48.0" prefHeight="25.0" prefWidth="49.0"/>
+      <TextField layoutX="465.0" layoutY="83.0" prefHeight="25.0" prefWidth="49.0"/>
+   </children>
 </AnchorPane>

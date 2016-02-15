@@ -16,7 +16,20 @@ public class Building implements Serializable {
     public Building(int numberOfFloors,int numberOfElevatorBanks, ArrayList<BuildingVisitor> buildingVisitors) {
         populateBuildingFloors(numberOfFloors);
         populateElevatorBank(numberOfElevatorBanks);
+        setEntryPointForBuildingVisitors(buildingVisitors);
 
+    }
+
+
+    private void setEntryPointForBuildingVisitors(ArrayList<BuildingVisitor> buildingVisitors) {
+
+        for (BuildingVisitor visitor : buildingVisitors) {
+            if (visitor.getBuildingVisitorEntryPoint() == BuildingVisitorEntryPoint.GARAGE) {
+                visitor.setCurrentFloor(this.buildingFloors.get(0));
+            } else {
+                visitor.setCurrentFloor(this.buildingFloors.get(1));
+            }
+        }
     }
 
 

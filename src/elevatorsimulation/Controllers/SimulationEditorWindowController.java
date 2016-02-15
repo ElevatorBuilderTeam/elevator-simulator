@@ -105,6 +105,7 @@ public class SimulationEditorWindowController extends Controller implements Init
 
             BuildingScenario tempScenario = buildingScenarioManager.loadScenario(scenarioToBeLoaded);
             ElevatorSimulationGraph scenarioElevatorGraph = tempScenario.getElevatorSimulatorGraph();
+            tempScenario.runScenario();
 
             loadWindow("SimulationElevatorGraphWindow", (loader, stage) -> {
                 loader.<SimulationElevatorGraphController>getController().initWithParent(this, scenarioElevatorGraph);
@@ -119,14 +120,24 @@ public class SimulationEditorWindowController extends Controller implements Init
         if (this.scenarioAddOnWindowOpened) {
             return;
         }
-        loadWindow("ScenarioAddOnWindow", (loader, stage) -> {
-            this.scenarioAddOnWindowOpened = true;
-            stage.setOnCloseRequest(event -> {
-                this.scenarioAddOnWindowOpened = false;
 
+        if (!scenarioListView.getSelectionModel().isEmpty()) {
+
+            String scenarioToBeLoaded = findNameForScenario(scenarioListView, false);
+
+            BuildingScenario tempScenario = buildingScenarioManager.loadScenario(scenarioToBeLoaded);
+
+
+            loadWindow("ScenarioAddOnWindow", (loader, stage) -> {
+                this.scenarioAddOnWindowOpened = true;
+                loader.<SimulationScenarioAddOnController>getController().initWithParent(this, tempScenario);
+
+                stage.setOnCloseRequest(event -> {
+                    this.scenarioAddOnWindowOpened = false;
+
+                });
             });
-        });
-
+        }
     }
 
     private String findNameForScenario(ListView scenarioListView, boolean shouldRemoveItem) {

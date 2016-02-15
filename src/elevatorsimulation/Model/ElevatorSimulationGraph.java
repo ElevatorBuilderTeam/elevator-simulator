@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class ElevatorSimulationGraph implements Serializable {
 
     // Not sure if we need these.
-    private LineChart<Integer, Integer> lineChart;
+    private transient LineChart<Integer, Integer> lineChart;
     private transient NumberAxis floorAxis;
     private transient NumberAxis timeAxis;
     private BuildingScenario buildingScenario;

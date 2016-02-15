@@ -16,6 +16,8 @@ public class BuildingScenario implements Serializable {
     private Building building;
     private ArrayList<BuildingVisitor> buildingVisitors;
     private StringBuilder scenarioEntryText;
+    private BuildingScenarioAI buildingScenarioAI;
+
 
 
     public BuildingScenario(int numberOfPassengers, int numberOfFloors, int numberOfElevatorBanks, String scenarioName, ElevatorSimulationGraph elevatorSimulatorGraph) {
@@ -51,14 +53,26 @@ public class BuildingScenario implements Serializable {
     private ArrayList<BuildingVisitor> defaultVisitors(int numberOfPassengers) {
         ArrayList<BuildingVisitor> visitors = new ArrayList<>();
         for (int i = 0; i < numberOfPassengers; i++) {
-            if (i % 2 == 0) visitors.add(new BuildingVisitor(4));
-            else visitors.add(new BuildingVisitor(5));
+            visitors.add(new BuildingVisitor());
         }
         return visitors;
     }
 
 
     public void runScenario() {
+        buildingScenarioAI = new BuildingScenarioAI();
+
+
+        for (BuildingVisitor visitor : buildingVisitors) {
+
+            buildingScenarioAI.findRandomFloor(this);
+            buildingScenarioAI.randomAverageTimeInBuilding(visitor, 10);
+            buildingScenarioAI.randomizeAverageTimeOnFloor(visitor, 10);
+            buildingScenarioAI.randomizeEntryPoint(visitor);
+
+        }
+
+
 
     }
 

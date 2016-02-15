@@ -16,11 +16,14 @@ public class FloorRequest implements Serializable {
 
 
     // have to make a floor Request from a certain floor
-    public FloorRequest(ElevatorBank elevatorBank, BuildingFloor currentFloor) {
-        this.destinations = new HashMap<Integer, BuildingFloor>();
+    public FloorRequest(ElevatorBank elevatorBank) {
+        this.destinations = new HashMap<>();
         this.elevatorBank = elevatorBank;
-        this.currentFloor = currentFloor;
 
+    }
+
+    public void setCurrentFloor(BuildingFloor currentFloor) {
+        this.currentFloor = currentFloor;
     }
 
     public void callNextAvailableElevator(int floorDestination) {

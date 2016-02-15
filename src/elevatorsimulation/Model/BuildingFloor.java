@@ -12,16 +12,12 @@ public class BuildingFloor implements Serializable {
     private int floorLevel, accessCode;
     private FloorState floorState;
     private ElevatorBank elevatorBank;
-
     private StringBuilder floorName;
-
-
 
     public BuildingFloor(int floorLevel, int accessCode) {
         this.floorLevel = floorLevel;
         this.accessCode = accessCode;
         this.floorName = updateFloorName(floorLevel);
-
     }
 
 

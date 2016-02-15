@@ -25,7 +25,7 @@ public class BuildingScenarioManager implements Serializable {
 
 
     protected BuildingScenarioManager() {
-        buildingScenarios = new HashMap<StringBuilder, BuildingScenario>();
+        buildingScenarios = new HashMap<>();
 
     }
 
