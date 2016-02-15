@@ -47,9 +47,7 @@ public class SimulationMenuWindowController extends Controller implements Initia
 
   public void simulationAnimationOptionClicked() {
 
-
     this.loadWindow("SimulationAnimationWindow", (loader, stage) -> {
-
 
     });
   }

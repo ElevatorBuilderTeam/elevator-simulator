@@ -28,7 +28,6 @@ import java.util.ResourceBundle;
  */
 public class SimulationEditorWindowController extends Controller implements Initializable {
 
-
     public TextField scenarioName;
     public TextField numOfPassengers;
     public TextField numOfElevatorBanks;
@@ -39,6 +38,8 @@ public class SimulationEditorWindowController extends Controller implements Init
     public Label scenarioFileName;
     public CheckBox appendScenriosCheckBox;
     public Label warningTextLabel;
+
+    private boolean scenarioAddOnWindowOpened = false;
 
     private BuildingScenario buildingScenario;
     private BuildingScenarioManager buildingScenarioManager;
@@ -85,7 +86,6 @@ public class SimulationEditorWindowController extends Controller implements Init
         clearData();
     }
 
-
     public void removeScenarioClicked(ActionEvent actionEvent) {
 
         if (!scenarioListView.getSelectionModel().isEmpty()) {
@@ -114,6 +114,21 @@ public class SimulationEditorWindowController extends Controller implements Init
         }
     }
 
+    public void additionalScenarioOptionsClicked(ActionEvent actionEvent) {
+
+        if (this.scenarioAddOnWindowOpened) {
+            return;
+        }
+        loadWindow("ScenarioAddOnWindow", (loader, stage) -> {
+            this.scenarioAddOnWindowOpened = true;
+            stage.setOnCloseRequest(event -> {
+                this.scenarioAddOnWindowOpened = false;
+
+            });
+        });
+
+    }
+
     private String findNameForScenario(ListView scenarioListView, boolean shouldRemoveItem) {
 
         String scenario = null;
@@ -129,7 +144,6 @@ public class SimulationEditorWindowController extends Controller implements Init
         return scenario;
 
     }
-
 
     private boolean valuesFromTextInputAreValid() {
         if (numOfFloors.getText() == "" ||
@@ -176,12 +190,10 @@ public class SimulationEditorWindowController extends Controller implements Init
 
     public void loadScenarioClicked(ActionEvent e) throws IOException {
 
-
         FileChooser fileChooser = new FileChooser();
         File selectedFile = fileChooser.showOpenDialog(null);
 
         fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("ELE files", "*.ele"));
-
 
         // load the file if it's there already.
 
@@ -199,10 +211,7 @@ public class SimulationEditorWindowController extends Controller implements Init
 
             scenarioFileName.setText(selectedFile.getName());
         }
-
-
     }
-
 
     private boolean isCorrectFileExtension(File selectedFile) {
         // file must end with extension .ele
@@ -256,6 +265,8 @@ public class SimulationEditorWindowController extends Controller implements Init
     private void setMaxSizeOfTextFields() {
 
     }
+
+
 }
 
 

@@ -33,5 +33,7 @@
       <CheckBox fx:id="appendScenriosCheckBox" layoutX="535.0" layoutY="386.0" mnemonicParsing="false"
                 text="Append Scenarios"/>
       <Label layoutX="85.0" layoutY="254.0" text="Scenario Name"/>
+      <Button layoutX="26.0" layoutY="394.0" mnemonicParsing="false" onAction="#additionalScenarioOptionsClicked"
+              text="Addition Scenario Options" textFill="#242524"/>
    </children>
 </AnchorPane>

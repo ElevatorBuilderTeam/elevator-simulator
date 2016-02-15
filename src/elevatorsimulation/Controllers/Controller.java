@@ -18,13 +18,10 @@ public abstract class Controller {
 
     protected Controller parentController;
 
-
-
     // Load a window on top of it's parent window
     public void loadWindow(String resource, WindowDidLoadCallback callback) {
 
         Region root;
-
 
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("elevatorsimulation/Views/" + resource + ".fxml"));
 

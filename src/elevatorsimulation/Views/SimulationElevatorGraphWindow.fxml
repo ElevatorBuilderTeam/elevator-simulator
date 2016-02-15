@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -8,9 +7,9 @@
             prefWidth="792.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="elevatorsimulation.Controllers.SimulationElevatorGraphController">
     <children>
-        <LineChart fx:id="elevatorLineChart" layoutX="47.0" layoutY="74.0" prefHeight="416.0" prefWidth="733.0">
+        <LineChart fx:id="elevatorLineChart" layoutX="47.0" layoutY="74.0" prefHeight="463.0" prefWidth="733.0">
             <xAxis>
-                <CategoryAxis fx:id="timeXaxis" prefHeight="31.0" prefWidth="676.0" side="BOTTOM"/>
+                <NumberAxis fx:id="timeXaxis" prefHeight="59.0" prefWidth="676.0" side="BOTTOM"/>
             </xAxis>
             <yAxis>
                 <NumberAxis fx:id="floorYaxis" side="LEFT"/>

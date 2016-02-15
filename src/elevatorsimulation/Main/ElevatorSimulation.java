@@ -1,11 +1,8 @@
 package elevatorsimulation.Main;
 
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2016 Jelevator, Bristol Community College. All Rights Reserved
  */
-
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -32,9 +29,6 @@ public class ElevatorSimulation extends Application
     stage.show();
   }
 
-  /**
-   * @param args the command line arguments
-   */
   public static void main(String[] args) {
     launch(args);
   }
