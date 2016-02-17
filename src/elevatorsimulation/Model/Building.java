@@ -20,7 +20,6 @@ public class Building implements Serializable {
 
     }
 
-
     private void setEntryPointForBuildingVisitors(ArrayList<BuildingVisitor> buildingVisitors) {
 
         for (BuildingVisitor visitor : buildingVisitors) {
@@ -32,16 +31,15 @@ public class Building implements Serializable {
         }
     }
 
-
     private void populateElevatorBank(int numberOfElevatorBanks) {
-        elevatorBanks = new ArrayList<ElevatorBank>();
+        elevatorBanks = new ArrayList<>();
         for(int i = 0; i < numberOfElevatorBanks; i++) {
             elevatorBanks.add(i, new ElevatorBank(this));
         }
     }
 
     private void populateBuildingFloors(int numberOfBuildingFloors) {
-        this.buildingFloors = new HashMap<Integer, BuildingFloor>();
+        this.buildingFloors = new HashMap<>();
         for(int i = 0; i < numberOfBuildingFloors; i++) {
             buildingFloors.put(i, new BuildingFloor(i,0));
         }

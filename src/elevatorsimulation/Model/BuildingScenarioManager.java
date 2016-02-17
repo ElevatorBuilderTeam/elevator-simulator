@@ -19,7 +19,7 @@ import java.util.Map;
 public class BuildingScenarioManager implements Serializable {
 
     private static BuildingScenarioManager scenarioManager = null;
-    private HashMap<StringBuilder, BuildingScenario> buildingScenarios;
+    private HashMap<String, BuildingScenario> buildingScenarios;
     private FileChooser fileChooser;
     private ObservableList<String> scenarioEntries = FXCollections.observableArrayList();
 
@@ -44,7 +44,7 @@ public class BuildingScenarioManager implements Serializable {
     }
 
     public BuildingScenario loadScenario(String scenarioName) {
-        for (Map.Entry<StringBuilder, BuildingScenario> entries : buildingScenarios.entrySet()) {
+        for (Map.Entry<String, BuildingScenario> entries : buildingScenarios.entrySet()) {
             if (scenarioName.equalsIgnoreCase(entries.getKey().toString())) {
                 return entries.getValue();
             }
@@ -54,7 +54,7 @@ public class BuildingScenarioManager implements Serializable {
 
     public void loadScenariosFromFile(File selectedFile, boolean shouldClearList, CompletionHandler completionHandler) {
 
-        HashMap<StringBuilder, BuildingScenario> tempScenarios = null;
+        HashMap<String, BuildingScenario> tempScenarios = null;
         try {
             FileInputStream fileInputStream = new FileInputStream(selectedFile);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
@@ -64,11 +64,11 @@ public class BuildingScenarioManager implements Serializable {
             this.buildingScenarios.clear();
 
 
-            tempScenarios = (HashMap<StringBuilder, BuildingScenario>) objectInputStream.readObject();
+            tempScenarios = (HashMap<String, BuildingScenario>) objectInputStream.readObject();
             this.buildingScenarios.putAll(tempScenarios);
 
 
-            for (Map.Entry<StringBuilder, BuildingScenario> entries : this.buildingScenarios.entrySet()) {
+            for (Map.Entry<String, BuildingScenario> entries : this.buildingScenarios.entrySet()) {
                 this.scenarioEntries.add(entries.getKey().toString());
             }
 
@@ -87,7 +87,7 @@ public class BuildingScenarioManager implements Serializable {
     public void addScenario(String scenarioName, BuildingScenario buildingScenario) {
 
         if (!scenarioExists(scenarioName)) {
-            buildingScenarios.put(new StringBuilder(scenarioName), buildingScenario);
+            buildingScenarios.put(scenarioName, buildingScenario);
             scenarioEntries.add(buildingScenario.getScenarioEntryText().toString());
             return;
         }
@@ -130,7 +130,7 @@ public class BuildingScenarioManager implements Serializable {
     }
 
     public boolean scenarioExists(String scenarioName) {
-        for (Map.Entry<StringBuilder, BuildingScenario> entries : buildingScenarios.entrySet()) {
+        for (Map.Entry<String, BuildingScenario> entries : buildingScenarios.entrySet()) {
             if (scenarioName.equalsIgnoreCase(entries.getKey().toString())) {
                 return true;
             }

@@ -36,6 +36,7 @@ public class SimulationMenuWindowController extends Controller implements Initia
     if (editorWindowOpened) {
       return;
     }
+
     this.loadWindow("SimulationEditorWindow", (loader, stage) -> {
       loader.<SimulationEditorWindowController>getController().initWithParent(this);
       editorWindowOpened = true;

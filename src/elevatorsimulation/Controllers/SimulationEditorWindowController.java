@@ -149,6 +149,9 @@ public class SimulationEditorWindowController extends Controller implements Init
         if (shouldRemoveItem) {
             buildingScenarioManager.removeScenario(scenario, () -> scenarioListView.setItems(buildingScenarioManager.getScenarioEntries()));
             buildingScenarioManager.getScenarioEntries().remove(selectedItemIndex);
+
+
+            // this.scenarioListView.getItems().remove(selectedItemIndex);
         }
 
         System.out.println("Scenario: " + scenario);
