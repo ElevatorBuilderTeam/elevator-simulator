@@ -1,5 +1,8 @@
 package elevatorsimulation.Model;
 
+import elevatorsimulation.Model.AI.VisitorAI;
+import elevatorsimulation.Model.Enums.BuildingVisitorEntryPoint;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -7,22 +10,22 @@ import java.util.ArrayList;
  * Created by andrewlincoln on 1/31/16.
  */
 public class BuildingVisitor implements Serializable {
-    int averageTimeOnFloor;
+    private int averageTimeOnFloor;
+    private int timeInBuilding;
+    private VisitorAI visitorAI;
+    private ElevatorBank currentElevatorBank;
+
     BuildingFloor currentFloor;
     private BuildingVisitorEntryPoint buildingVisitorEntryPoint;
-
-    int timeInBuilding;
     ArrayList<FloorRequest> floorRequests;
-
 
     public BuildingVisitor() {
         floorRequests = new ArrayList<FloorRequest>();
         buildingVisitorEntryPoint = BuildingVisitorEntryPoint.LOBBY;
+        visitorAI = new VisitorAI(this);
     }
 
-
-    //SETTERS
-
+    //SETTERS ***********************************************
 
     public void setBuildingVisitorEntryPoint(BuildingVisitorEntryPoint buildingVisitorEntryPoint) {
         this.buildingVisitorEntryPoint = buildingVisitorEntryPoint;
@@ -40,8 +43,16 @@ public class BuildingVisitor implements Serializable {
         this.averageTimeOnFloor = averageTimeOnFloor;
     }
 
-    //GETTERS
+    public void setElevatorBank(ElevatorBank elevatorBank) {
+        this.currentElevatorBank = elevatorBank;
+    }
 
+
+    //GETTERS ***********************************************
+
+    public VisitorAI getVisitorAI() {
+        return visitorAI;
+    }
 
     public ArrayList<FloorRequest> getFloorRequests() {
         return floorRequests;
@@ -55,18 +66,28 @@ public class BuildingVisitor implements Serializable {
         return averageTimeOnFloor;
     }
 
-    public void enterBuilding() {
+    public ElevatorBank getCurrentElevatorBank() {
+        return currentElevatorBank;
+    }
 
+    // PUBLIC INTERFACE ***********************************************
+
+    public void enterBuilding(int delay, int deviation) {
+        visitorAI.runVisitorEnteringSequence(delay, deviation);
     }
 
     public void exitBuilding() {
 
     }
 
-    public void addFloorRequest(FloorRequest floorRequest) {
+
+    // visitor will choose a random elevatorbank in the building.
+    public void addToRequestQueue() {
+        FloorRequest floorRequest = new FloorRequest(this.currentElevatorBank);
 
         floorRequest.setCurrentFloor(this.currentFloor);
         this.floorRequests.add(floorRequest);
     }
 
 }
+

@@ -33,7 +33,7 @@ public class SimulationEditorWindowController extends Controller implements Init
     public TextField numOfElevatorBanks;
     public TextField numOfFloors;
 
-    public ListView scenarioListView;
+    public ListView<String> scenarioListView;
     public AnchorPane anchorPane;
     public Label scenarioFileName;
     public CheckBox appendScenriosCheckBox;
@@ -41,8 +41,8 @@ public class SimulationEditorWindowController extends Controller implements Init
 
     private boolean scenarioAddOnWindowOpened = false;
 
-    private BuildingScenario buildingScenario;
-    private BuildingScenarioManager buildingScenarioManager;
+
+    private BuildingScenarioManager buildingScenarioManager = BuildingScenarioManager.getDefaultManager();
 
 
     @Override
@@ -71,9 +71,7 @@ public class SimulationEditorWindowController extends Controller implements Init
             int numOfElevatorBanks = Integer.parseInt(removeWhiteSpaceFromString(this.numOfElevatorBanks.getText()));
             String scenarioName = removeWhiteSpaceFromString(this.scenarioName.getText());
 
-            ElevatorSimulationGraph elevatorSimulationGraph = new ElevatorSimulationGraph();
-
-            buildingScenarioManager.addScenario(scenarioName, new BuildingScenario(numOfPassengers, numOfFloors, numOfElevatorBanks, scenarioName, elevatorSimulationGraph));
+            buildingScenarioManager.addScenario(scenarioName, new BuildingScenario(numOfPassengers, numOfFloors, numOfElevatorBanks, scenarioName, ElevatorSimulationGraph.getDefaultGraph()));
 
             // update the scenario list
             scenarioListView.setItems(buildingScenarioManager.getScenarioEntries());
@@ -104,18 +102,22 @@ public class SimulationEditorWindowController extends Controller implements Init
             String scenarioToBeLoaded = findNameForScenario(scenarioListView, false);
 
             BuildingScenario tempScenario = buildingScenarioManager.loadScenario(scenarioToBeLoaded);
-            ElevatorSimulationGraph scenarioElevatorGraph = tempScenario.getElevatorSimulatorGraph();
+
+            //TODO: THIS METHOD CALL RUNS ALL THE AI SYSTEMS
             tempScenario.runScenario();
 
             loadWindow("SimulationElevatorGraphWindow", (loader, stage) -> {
-                loader.<SimulationElevatorGraphController>getController().initWithParent(this, scenarioElevatorGraph);
+                loader.<SimulationElevatorGraphController>getController().initWithParent(this);
 
+                stage.setOnCloseRequest(event -> {
+                    ElevatorSimulationGraph.getDefaultGraph().stopTimeline();
+                });
             });
 
         }
     }
 
-    public void additionalScenarioOptionsClicked(ActionEvent actionEvent) {
+    public void additionalScenarioOptionsClicked() {
 
         if (this.scenarioAddOnWindowOpened) {
             return;
@@ -132,19 +134,16 @@ public class SimulationEditorWindowController extends Controller implements Init
                 this.scenarioAddOnWindowOpened = true;
                 loader.<SimulationScenarioAddOnController>getController().initWithParent(this, tempScenario);
 
-                stage.setOnCloseRequest(event -> {
-                    this.scenarioAddOnWindowOpened = false;
-
-                });
+                stage.setOnCloseRequest(event -> this.scenarioAddOnWindowOpened = false);
             });
         }
     }
 
-    private String findNameForScenario(ListView scenarioListView, boolean shouldRemoveItem) {
+    private String findNameForScenario(ListView<String> scenarioListView, boolean shouldRemoveItem) {
 
-        String scenario = null;
+        String scenario;
         int selectedItemIndex = scenarioListView.getSelectionModel().getSelectedIndex();
-        scenario = (String) scenarioListView.getItems().get(selectedItemIndex);
+        scenario = scenarioListView.getItems().get(selectedItemIndex);
 
         if (shouldRemoveItem) {
             buildingScenarioManager.removeScenario(scenario, () -> scenarioListView.setItems(buildingScenarioManager.getScenarioEntries()));
@@ -171,7 +170,6 @@ public class SimulationEditorWindowController extends Controller implements Init
     }
 
     private void checkForScenarioEntries() {
-        buildingScenarioManager = BuildingScenarioManager.getDefaultManager();
 
         if (buildingScenarioManager.getScenarioEntries() != null) {
             scenarioListView.setItems(buildingScenarioManager.getScenarioEntries());

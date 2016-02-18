@@ -2,9 +2,11 @@
 
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0"
-            prefWidth="792.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            prefWidth="1050.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="elevatorsimulation.Controllers.SimulationElevatorGraphController">
     <children>
         <LineChart fx:id="elevatorLineChart" layoutX="47.0" layoutY="74.0" prefHeight="463.0" prefWidth="733.0">
@@ -15,5 +17,11 @@
                 <NumberAxis fx:id="floorYaxis" side="LEFT"/>
             </yAxis>
         </LineChart>
+        <Label layoutX="806.0" layoutY="86.0" text="Visitors In Building"/>
+        <Label fx:id="visitorInBuildingCount" layoutX="847.0" layoutY="103.0" text="0">
+            <font>
+                <Font size="30.0"/>
+            </font>
+        </Label>
     </children>
 </AnchorPane>

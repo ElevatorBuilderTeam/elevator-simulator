@@ -8,7 +8,6 @@ import java.util.HashMap;
  */
 public class ElevatorBank implements Serializable {
     private HashMap<Integer, Elevator> elevators;
-    private int numberOfFloors;
     private StringBuilder bankID;
 
     private Building building;
@@ -16,11 +15,12 @@ public class ElevatorBank implements Serializable {
     public ElevatorBank(Building building) {
         this.building = building;
 
-        this.populateElevators(building.getBuildingFloors().size());
+        // 4 elevators per bank
+        this.populateElevators(4);
 
     }
 
-
+    //PRIVATE IMPLEMENTATIONS ***********************************************
     private void populateElevators(int numberOfFloors) {
 
         elevators = new HashMap<Integer, Elevator>();

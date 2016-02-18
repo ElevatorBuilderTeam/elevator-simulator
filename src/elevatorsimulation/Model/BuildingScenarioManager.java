@@ -4,7 +4,6 @@ import elevatorsimulation.Callback.CompletionHandler;
 import elevatorsimulation.Exceptions.ScenarioAlreadyExistsException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.stage.FileChooser;
 
 import java.io.*;
 import java.util.HashMap;
@@ -20,7 +19,7 @@ public class BuildingScenarioManager implements Serializable {
 
     private static BuildingScenarioManager scenarioManager = null;
     private HashMap<String, BuildingScenario> buildingScenarios;
-    private FileChooser fileChooser;
+
     private ObservableList<String> scenarioEntries = FXCollections.observableArrayList();
 
 
@@ -29,6 +28,9 @@ public class BuildingScenarioManager implements Serializable {
 
     }
 
+
+    //GETTERS ***********************************************
+
     public static BuildingScenarioManager getDefaultManager() {
         if (scenarioManager == null) {
             scenarioManager = new BuildingScenarioManager();
@@ -36,16 +38,15 @@ public class BuildingScenarioManager implements Serializable {
         return scenarioManager;
     }
 
-    //GETTERS
-
-
     public ObservableList<String> getScenarioEntries() {
         return scenarioEntries;
     }
 
+    //PUBLIC INTERFACE ***********************************************
+
     public BuildingScenario loadScenario(String scenarioName) {
         for (Map.Entry<String, BuildingScenario> entries : buildingScenarios.entrySet()) {
-            if (scenarioName.equalsIgnoreCase(entries.getKey().toString())) {
+            if (scenarioName.equalsIgnoreCase(entries.getKey())) {
                 return entries.getValue();
             }
         }
@@ -59,28 +60,22 @@ public class BuildingScenarioManager implements Serializable {
             FileInputStream fileInputStream = new FileInputStream(selectedFile);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 
-
             this.scenarioEntries.removeAll();
             this.buildingScenarios.clear();
-
 
             tempScenarios = (HashMap<String, BuildingScenario>) objectInputStream.readObject();
             this.buildingScenarios.putAll(tempScenarios);
 
 
             for (Map.Entry<String, BuildingScenario> entries : this.buildingScenarios.entrySet()) {
-                this.scenarioEntries.add(entries.getKey().toString());
+                this.scenarioEntries.add(entries.getKey());
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
         completionHandler.completed();
-
-
     }
 
 
@@ -131,7 +126,7 @@ public class BuildingScenarioManager implements Serializable {
 
     public boolean scenarioExists(String scenarioName) {
         for (Map.Entry<String, BuildingScenario> entries : buildingScenarios.entrySet()) {
-            if (scenarioName.equalsIgnoreCase(entries.getKey().toString())) {
+            if (scenarioName.equalsIgnoreCase(entries.getKey())) {
                 return true;
             }
         }

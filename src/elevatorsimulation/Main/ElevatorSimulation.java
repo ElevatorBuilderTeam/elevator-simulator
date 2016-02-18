@@ -27,6 +27,9 @@ public class ElevatorSimulation extends Application
     stage.setScene(scene);
     stage.setResizable(false);
     stage.show();
+
+    //VisitorAI buildingScenarioAI = new VisitorAI();
+    // buildingScenarioAI.runVisitorEnteringSequence(5,3);
   }
 
   public static void main(String[] args) {

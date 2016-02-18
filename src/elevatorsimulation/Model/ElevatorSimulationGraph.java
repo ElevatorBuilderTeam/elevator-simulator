@@ -16,22 +16,32 @@ import java.util.ArrayList;
  */
 public class ElevatorSimulationGraph implements Serializable {
 
-    // Not sure if we need these.
     private transient LineChart<Integer, Integer> lineChart;
     private transient NumberAxis floorAxis;
     private transient NumberAxis timeAxis;
     private BuildingScenario buildingScenario;
     private int maxY, xBounds;
+    private String visitorsInBuildingLabel;
+
+    private static ElevatorSimulationGraph simulationGraph = null;
 
     private transient Timeline timeline;
 
-    public ElevatorSimulationGraph() {
-
+    private ElevatorSimulationGraph() {
 
         timeline = new Timeline();
         timeline.setCycleCount(2);
-
     }
+
+    public static ElevatorSimulationGraph getDefaultGraph() {
+        if (simulationGraph == null) {
+            simulationGraph = new ElevatorSimulationGraph();
+        }
+
+        return simulationGraph;
+    }
+
+    //SETTERS ***********************************************
 
     public void setBuildingScenario(BuildingScenario buildingScenario) {
         this.buildingScenario = buildingScenario;
@@ -40,18 +50,13 @@ public class ElevatorSimulationGraph implements Serializable {
 
     }
 
-    public void setUpChart(LineChart lineChart, NumberAxis floorAxis, NumberAxis timeAxis) {
+    //GETTERS ***********************************************
 
-        this.lineChart = lineChart;
-        this.floorAxis = floorAxis;
-        this.timeAxis = timeAxis;
-
-        lineChart.setCreateSymbols(false);
-        // this.lineChart.setAnimated(false);
-        setUpAxis();
-
-        buildChart();
+    public int getMaxY() {
+        return maxY;
     }
+
+    //PRIVATE IMPLEMENTATIONS ***********************************************
 
     private void setUpAxis() {
         floorAxis.setAutoRanging(false);
@@ -73,32 +78,23 @@ public class ElevatorSimulationGraph implements Serializable {
         this.floorAxis.setUpperBound(maxY);
         timeline.setCycleCount(1);
 
-        Timeline secondTimeline = new Timeline();
-
-        timeline.getKeyFrames().addAll(interpolationTest(0, 10, 5, 1, 0));
-        timeline.getKeyFrames().addAll(interpolationTest(0, 10, 1, 5, 1));
-
-        timeline.getKeyFrames().addAll(interpolationTest(0, 5, 3, 9, 2));
+        //TESTING
+        addElevatorToLineChart(0, 10, 1, 5, 0);
+        addElevatorToLineChart(10, 20, 5, 1, 0);
 
         timeline.play();
-
     }
 
+    private ArrayList<KeyFrame> elevatorSeries(int startTime, int endTime, int currentFloor, int destinationFloor, int elevatorID) {
 
-    private void addVisitorsToChart() {
-
-    }
-
-
-    private ArrayList<KeyFrame> interpolationTest(int startTime, int endTime, int currentFloor, int destinationFloor, int elevatorID) {
         ArrayList<KeyFrame> frames = new ArrayList<>(endTime - startTime);
 
         // to hold a reference to the difference in time since the keyframe works in the reverse fashion.
         for (int i = startTime; i <= endTime; i++) {
 
             int dt = startTime;
-
             int dy = currentFloor;
+
             frames.add(new KeyFrame(Duration.seconds(startTime), event -> addChartData(dt, dy, elevatorID)));
             System.out.println("Start Time" + (startTime) + " X: " + dt + " Y: " + dy + " Current Floor: " + currentFloor);
 
@@ -116,8 +112,11 @@ public class ElevatorSimulationGraph implements Serializable {
     }
 
     private void addChartData(int xPos, int yPos, int elevator) {
+
         XYChart.Series<Integer, Integer> series;
+
         final int ASCII_CHARACTER__SHIFT = 65;
+
         try {
             // Every visitor gets its own series
             // the series has an this element, so get that
@@ -135,9 +134,33 @@ public class ElevatorSimulationGraph implements Serializable {
             lineChart.getData().add(elevator, series);
 
         }
-        // populating the series with data
 
+        // populating the series with data
         series.getData().add(new XYChart.Data<>(xPos, yPos));
+    }
+
+    //PUBLIC INTERFACE ***********************************************
+
+    public void setUpChart(LineChart lineChart, NumberAxis floorAxis, NumberAxis timeAxis, String visitorsInBuildingLabel) {
+
+        this.lineChart = lineChart;
+        this.floorAxis = floorAxis;
+        this.timeAxis = timeAxis;
+        this.visitorsInBuildingLabel = visitorsInBuildingLabel;
+
+        lineChart.setCreateSymbols(false);
+
+        setUpAxis();
+
+        buildChart();
+    }
+
+    public void addElevatorToLineChart(int startTime, int endTime, int currentFloor, int destinationFloor, int elevatorID) {
+        this.timeline.getKeyFrames().addAll(elevatorSeries(startTime, endTime, currentFloor, destinationFloor, elevatorID));
+    }
+
+    public void stopTimeline() {
+        timeline.stop();
     }
 }
 

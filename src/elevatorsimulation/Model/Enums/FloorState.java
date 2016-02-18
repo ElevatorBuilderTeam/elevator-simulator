@@ -1,4 +1,4 @@
-package elevatorsimulation.Model;
+package elevatorsimulation.Model.Enums;
 
 import java.io.Serializable;
 

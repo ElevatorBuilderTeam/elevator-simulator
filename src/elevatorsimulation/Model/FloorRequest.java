@@ -1,15 +1,16 @@
 package elevatorsimulation.Model;
 
+import elevatorsimulation.Model.Enums.ElevatorState;
+
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by andrewlincoln on 1/30/16.
  */
 public class FloorRequest implements Serializable {
-    HashMap<Integer, BuildingFloor> destinations;
+
     private ElevatorBank elevatorBank;
     private BuildingFloor currentFloor;
     private Elevator nextAvailableElevator;
@@ -17,7 +18,6 @@ public class FloorRequest implements Serializable {
 
     // have to make a floor Request from a certain floor
     public FloorRequest(ElevatorBank elevatorBank) {
-        this.destinations = new HashMap<>();
         this.elevatorBank = elevatorBank;
 
     }
@@ -26,10 +26,9 @@ public class FloorRequest implements Serializable {
         this.currentFloor = currentFloor;
     }
 
-    public void callNextAvailableElevator(int floorDestination) {
+    public Elevator callNextAvailableElevator(int floorDestination) {
 
-        nextAvailableElevator = findAvailableElevator();
-        nextAvailableElevator.moveTo(floorDestination);
+        return nextAvailableElevator = findAvailableElevator();
     }
 
       /*
@@ -61,10 +60,9 @@ public class FloorRequest implements Serializable {
         //
         ArrayList<Elevator> standingElevators = new ArrayList<>();
         for (Map.Entry<Integer, Elevator> entry : this.elevatorBank.getElevators().entrySet()) {
+
             if (entry.getValue().getElevatorState() == ElevatorState.STAND) {
                 standingElevators.add(entry.getValue());
-
-
             }
 
         }

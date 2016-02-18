@@ -1,8 +1,11 @@
 package elevatorsimulation.Model;
 
+import elevatorsimulation.Model.Enums.BuildingVisitorEntryPoint;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 /**
  * Created by andrewlincoln on 1/31/16.
@@ -14,11 +17,14 @@ public class Building implements Serializable {
     private ArrayList<ElevatorBank> elevatorBanks;
 
     public Building(int numberOfFloors,int numberOfElevatorBanks, ArrayList<BuildingVisitor> buildingVisitors) {
+        this.buildingVisitors = buildingVisitors;
+
         populateBuildingFloors(numberOfFloors);
         populateElevatorBank(numberOfElevatorBanks);
         setEntryPointForBuildingVisitors(buildingVisitors);
-
     }
+
+    // PRIVATE IMPLEMENTATIONS  ***********************************************
 
     private void setEntryPointForBuildingVisitors(ArrayList<BuildingVisitor> buildingVisitors) {
 
@@ -45,8 +51,14 @@ public class Building implements Serializable {
         }
     }
 
+    // GETTERS  ***********************************************
+
     public HashMap<Integer, BuildingFloor> getBuildingFloors() {
         return buildingFloors;
+    }
+
+    public ElevatorBank getRandomElevatorBank() {
+        return this.elevatorBanks.get(new Random().nextInt(elevatorBanks.size() - 1));
     }
 
     public ArrayList<BuildingVisitor> getBuildingVisitors() {

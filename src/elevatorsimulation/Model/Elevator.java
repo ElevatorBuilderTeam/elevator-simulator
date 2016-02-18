@@ -1,6 +1,9 @@
 package elevatorsimulation.Model;
 
 import elevatorsimulation.Exceptions.BuildingFloorValueNotFoundException;
+import elevatorsimulation.Model.AI.ElevatorAI;
+import elevatorsimulation.Model.Enums.ElevatorDirection;
+import elevatorsimulation.Model.Enums.ElevatorState;
 
 import java.io.Serializable;
 
@@ -16,6 +19,8 @@ public class Elevator implements Serializable {
     private ElevatorState elevatorState;
     private ElevatorDirection elevatorDirection;
     private ElevatorBank elevatorBank;
+    private ElevatorAI elevatorAI;
+
 
     private String identifier;
 
@@ -25,30 +30,21 @@ public class Elevator implements Serializable {
 
     public Elevator(ElevatorBank elevatorBank) {
         this.elevatorBank = elevatorBank;
+        this.elevatorAI = new ElevatorAI(this);
     }
+
+    //GETTERS ***********************************************
 
     public BuildingFloor getCurrentFloor() {
         return currentFloor;
-    }
-
-    public void setCurrentFloor(BuildingFloor currentFloor) {
-        this.currentFloor = currentFloor;
     }
 
     public int getCurrentCapacity() {
         return currentCapacity;
     }
 
-    public void setCurrentCapacity(int currentCapacity) {
-        this.currentCapacity = currentCapacity;
-    }
-
     public int getSpeed() {
         return speed;
-    }
-
-    public void setSpeed(int currentSpeed) {
-        this.speed = speed;
     }
 
     public boolean isOperational() {
@@ -63,16 +59,8 @@ public class Elevator implements Serializable {
         return isEmpty;
     }
 
-    public void setEmpty(boolean empty) {
-        isEmpty = empty;
-    }
-
     public boolean isAtCapacity() {
         return isAtCapacity;
-    }
-
-    public void setAtCapacity(boolean atCapacity) {
-        isAtCapacity = atCapacity;
     }
 
     public ElevatorState getElevatorState() {
@@ -82,16 +70,36 @@ public class Elevator implements Serializable {
     public ElevatorDirection getElevatorDirection() {
         return elevatorDirection;
     }
-    
+
     public String getIdentifier() {
         return identifier;
     }
 
+    //SETTERS ***********************************************
 
-    // private implementations
+    public void setCurrentFloor(BuildingFloor currentFloor) {
+        this.currentFloor = currentFloor;
+    }
+
+    public void setCurrentCapacity(int currentCapacity) {
+        this.currentCapacity = currentCapacity;
+    }
+
+    public void setSpeed(int currentSpeed) {
+        this.speed = speed;
+    }
+
+    public void setEmpty(boolean empty) {
+        isEmpty = empty;
+    }
+
+    public void setAtCapacity(boolean atCapacity) {
+        isAtCapacity = atCapacity;
+    }
+
+    //PRIVATE IMPLEMENTATIONS ***********************************************
 
     private BuildingFloor checkFloorAccessibility(int floorLevel) throws BuildingFloorValueNotFoundException {
-
 
         BuildingFloor value = this.elevatorBank.getBuilding().getBuildingFloors().get(floorLevel);
         if(value != null) {
@@ -108,7 +116,26 @@ public class Elevator implements Serializable {
         return null;
     }
 
-    //public specification
+    private void updateState() {
+        /*
+        The doors of the elevator can be open or closed. The doors can open only after a full stop.
+        The normal door position is closed.
+        The doors open only by the rider's request.
+        The doors shall stay open only for a period of boarding time.
+         */
+        if (this.doorsClosed && this.speed == 0) {
+            this.elevatorState = ElevatorState.STAND;
+        } else if (this.doorsOpen && this.speed == 0) {
+
+            this.elevatorState = ElevatorState.LOADING;
+        } else {
+
+            this.elevatorState = ElevatorState.MAINTENANCE;
+        }
+
+    }
+
+    //PUBLIC INTERFACE ***********************************************
 
     public void moveTo(BuildingFloor buildingFloor) {
 
@@ -164,23 +191,6 @@ public class Elevator implements Serializable {
         this.updateState();
     }
 
-    private void updateState() {
-        /*
-        The doors of the elevator can be open or closed. The doors can open only after a full stop.
-        The normal door position is closed.
-        The doors open only by the rider's request.
-        The doors shall stay open only for a period of boarding time.
-         */
-        if (this.doorsClosed && this.speed == 0) {
-            this.elevatorState = ElevatorState.STAND;
-        } else if (this.doorsOpen && this.speed == 0) {
 
-            this.elevatorState = ElevatorState.LOADING;
-        } else {
-
-            this.elevatorState = ElevatorState.MAINTENANCE;
-        }
-
-    }
 
 }

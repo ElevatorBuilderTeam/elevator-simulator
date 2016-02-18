@@ -4,6 +4,7 @@ import elevatorsimulation.Model.ElevatorSimulationGraph;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.control.Label;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -13,12 +14,12 @@ import java.util.ResourceBundle;
  */
 public class SimulationElevatorGraphController extends Controller implements Initializable {
 
-
     public LineChart elevatorLineChart;
     public NumberAxis floorYaxis;
     public NumberAxis timeXaxis;
 
     public int number;
+    public Label visitorInBuildingCount;
 
     private ElevatorSimulationGraph elevatorSimulationGraph;
 
@@ -28,14 +29,12 @@ public class SimulationElevatorGraphController extends Controller implements Ini
         // BuildingScenarioManager.getDefaultManager().loadScenario();
     }
 
-
-    public void initWithParent(Controller controller, ElevatorSimulationGraph elevatorSimulationGraph) {
+    @Override
+    public void initWithParent(Controller controller) {
         super.initWithParent(controller);
-        this.elevatorSimulationGraph = elevatorSimulationGraph;
-        this.elevatorSimulationGraph.setUpChart(elevatorLineChart, floorYaxis, timeXaxis);
+        this.elevatorSimulationGraph = ElevatorSimulationGraph.getDefaultGraph();
+        this.elevatorSimulationGraph.setUpChart(elevatorLineChart, floorYaxis, timeXaxis, "");
 
     }
-
-
 
 }

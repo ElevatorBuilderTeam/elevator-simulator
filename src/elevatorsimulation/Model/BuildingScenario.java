@@ -1,6 +1,8 @@
 package elevatorsimulation.Model;
 
 
+import elevatorsimulation.Model.AI.VisitorAI;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -16,27 +18,44 @@ public class BuildingScenario implements Serializable {
     private Building building;
     private ArrayList<BuildingVisitor> buildingVisitors;
     private StringBuilder scenarioEntryText;
-    private BuildingScenarioAI buildingScenarioAI;
-
-
 
     public BuildingScenario(int numberOfPassengers, int numberOfFloors, int numberOfElevatorBanks, String scenarioName, ElevatorSimulationGraph elevatorSimulatorGraph) {
         this.numberOfPassengers = numberOfPassengers;
         this.numberOfFloors = numberOfFloors;
         this.numberOfElevatorBanks = numberOfElevatorBanks;
 
-        //TODO This is a test that will be replaced later
         this.buildingVisitors = defaultVisitors(numberOfPassengers);
+        building = new Building(numberOfFloors, numberOfElevatorBanks, buildingVisitors);
+
+        //TODO This is a test that will be replaced later
+
         this.scenarioName = new StringBuilder(scenarioName);
         this.elevatorSimulatorGraph = elevatorSimulatorGraph;
+        setRandomElevatorBankForVisitors();
 
-        building = new Building(numberOfFloors, numberOfElevatorBanks, buildingVisitors);
         scenarioEntryText = this.scenarioName;
         elevatorSimulatorGraph.setBuildingScenario(this);
     }
 
-    //GETTERS
+    // PRIVATE IMPLEMENTATIONS ***********************************************
 
+    private ArrayList<BuildingVisitor> defaultVisitors(int numberOfPassengers) {
+        ArrayList<BuildingVisitor> visitors = new ArrayList<>();
+        for (int i = 0; i < numberOfPassengers; i++) {
+            BuildingVisitor buildingVisitor = new BuildingVisitor();
+
+            visitors.add(new BuildingVisitor());
+        }
+        return visitors;
+    }
+
+    private void setRandomElevatorBankForVisitors() {
+        for (BuildingVisitor visitor : this.buildingVisitors) {
+            visitor.setElevatorBank(this.building.getRandomElevatorBank());
+        }
+    }
+
+    //GETTERS ***********************************************
 
     public ElevatorSimulationGraph getElevatorSimulatorGraph() {
         return elevatorSimulatorGraph;
@@ -50,30 +69,28 @@ public class BuildingScenario implements Serializable {
         return numberOfFloors;
     }
 
-    private ArrayList<BuildingVisitor> defaultVisitors(int numberOfPassengers) {
-        ArrayList<BuildingVisitor> visitors = new ArrayList<>();
-        for (int i = 0; i < numberOfPassengers; i++) {
-            visitors.add(new BuildingVisitor());
-        }
-        return visitors;
-    }
-
+    //PUBLIC INTERFACE ***********************************************
 
     public void runScenario() {
-        buildingScenarioAI = new BuildingScenarioAI();
-
 
         for (BuildingVisitor visitor : buildingVisitors) {
 
-            buildingScenarioAI.findRandomFloor(this);
-            buildingScenarioAI.randomAverageTimeInBuilding(visitor, 10);
-            buildingScenarioAI.randomizeAverageTimeOnFloor(visitor, 10);
-            buildingScenarioAI.randomizeEntryPoint(visitor);
+            //TODO: Set a number of floor requests, default is a random amount based on the number of floors the building has
+
+            VisitorAI visitorAI = visitor.getVisitorAI();
+
+            visitorAI.setAmountOfFloorRequests(this.getNumberOfFloors());
+            visitorAI.findRandomFloor();
+            visitorAI.randomAverageTimeInBuilding(10);
+            visitorAI.randomizeAverageTimeOnFloor(10, 4);
+            visitorAI.randomizeEntryPoint();
+            visitorAI.runVisitorEnteringSequence(10, 4);
+
+            visitor.enterBuilding(5, 4);
+
+
 
         }
-
-
-
     }
 
 }

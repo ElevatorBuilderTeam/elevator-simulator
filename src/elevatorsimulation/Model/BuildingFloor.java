@@ -1,5 +1,7 @@
 package elevatorsimulation.Model;
 
+import elevatorsimulation.Model.Enums.FloorState;
+
 import java.io.Serializable;
 
 /**
@@ -20,19 +22,7 @@ public class BuildingFloor implements Serializable {
         this.floorName = updateFloorName(floorLevel);
     }
 
-
-    public StringBuilder getFloorName() {
-        return floorName;
-    }
-    public int getFloorLevel() {
-        return floorLevel;
-    }
-
-    public void allowAccess(int accessCode) {
-        if (this.accessCode == accessCode) {
-            //allow access
-        }
-    }
+    // PRIVATE IMPLEMENTATIONS ***********************************************
 
     private StringBuilder updateFloorName(int floorLevel) {
 
@@ -48,5 +38,23 @@ public class BuildingFloor implements Serializable {
 
         }
     }
+
+    // GETTERS  ***********************************************
+
+    public StringBuilder getFloorName() {
+        return floorName;
+    }
+
+    public int getFloorLevel() {
+        return floorLevel;
+    }
+
+    public void allowAccess(int accessCode) {
+        if (this.accessCode == accessCode) {
+            //allow access
+        }
+    }
+
+
 
 }

@@ -28,7 +28,6 @@ public class SimulationMenuWindowController extends Controller implements Initia
   @Override
   public void initialize(URL url, ResourceBundle rb) {
 
-
   }
   
   public void simulationEditorOptionClicked() {
@@ -40,23 +39,12 @@ public class SimulationMenuWindowController extends Controller implements Initia
     this.loadWindow("SimulationEditorWindow", (loader, stage) -> {
       loader.<SimulationEditorWindowController>getController().initWithParent(this);
       editorWindowOpened = true;
-      stage.setOnCloseRequest((event) -> {
-        editorWindowOpened = false;
-      });
+      stage.setOnCloseRequest((event) -> editorWindowOpened = false);
     });
   }
-
-  public void simulationAnimationOptionClicked() {
-
-    this.loadWindow("SimulationAnimationWindow", (loader, stage) -> {
-
-    });
-  }
-
 
   public void exitMenuOptionClicked() {
     System.exit(0);
   }
-
 
 }
