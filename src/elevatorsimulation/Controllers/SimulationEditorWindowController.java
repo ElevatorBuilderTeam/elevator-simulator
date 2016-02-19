@@ -105,12 +105,13 @@ public class SimulationEditorWindowController extends Controller implements Init
 
             //TODO: THIS METHOD CALL RUNS ALL THE AI SYSTEMS
             tempScenario.runScenario();
-
             loadWindow("SimulationElevatorGraphWindow", (loader, stage) -> {
                 loader.<SimulationElevatorGraphController>getController().initWithParent(this);
 
                 stage.setOnCloseRequest(event -> {
-                    ElevatorSimulationGraph.getDefaultGraph().stopTimeline();
+                    ElevatorSimulationGraph.getDefaultGraph().resetData();
+                    tempScenario.stopScenario();
+
                 });
             });
 

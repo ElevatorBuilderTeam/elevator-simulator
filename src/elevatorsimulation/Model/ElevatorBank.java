@@ -37,8 +37,5 @@ public class ElevatorBank implements Serializable {
         return building;
     }
 
-    public void addRequest(FloorRequest floorRequest){
-
-    }
 
 }

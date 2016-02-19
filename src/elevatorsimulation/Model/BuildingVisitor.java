@@ -1,7 +1,7 @@
 package elevatorsimulation.Model;
 
-import elevatorsimulation.Model.AI.VisitorAI;
 import elevatorsimulation.Model.Enums.BuildingVisitorEntryPoint;
+import elevatorsimulation.Model.Enums.BuildingVisitorState;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,10 +10,16 @@ import java.util.ArrayList;
  * Created by andrewlincoln on 1/31/16.
  */
 public class BuildingVisitor implements Serializable {
+
     private int averageTimeOnFloor;
     private int timeInBuilding;
-    private VisitorAI visitorAI;
     private ElevatorBank currentElevatorBank;
+    private BuildingVisitorState buildingVisitorState;
+
+
+
+
+
 
     BuildingFloor currentFloor;
     private BuildingVisitorEntryPoint buildingVisitorEntryPoint;
@@ -22,10 +28,18 @@ public class BuildingVisitor implements Serializable {
     public BuildingVisitor() {
         floorRequests = new ArrayList<FloorRequest>();
         buildingVisitorEntryPoint = BuildingVisitorEntryPoint.LOBBY;
-        visitorAI = new VisitorAI(this);
+        buildingVisitorState = BuildingVisitorState.OUTSIDE_OF_BUILDING;
+
+
     }
 
     //SETTERS ***********************************************
+
+    public void setBuildingVisitorState(BuildingVisitorState buildingVisitorState) {
+        this.buildingVisitorState = buildingVisitorState;
+        ElevatorSimulationGraph.getDefaultGraph().update();
+
+    }
 
     public void setBuildingVisitorEntryPoint(BuildingVisitorEntryPoint buildingVisitorEntryPoint) {
         this.buildingVisitorEntryPoint = buildingVisitorEntryPoint;
@@ -50,8 +64,13 @@ public class BuildingVisitor implements Serializable {
 
     //GETTERS ***********************************************
 
-    public VisitorAI getVisitorAI() {
-        return visitorAI;
+
+    public BuildingVisitorState getBuildingVisitorState() {
+        return buildingVisitorState;
+    }
+
+    public boolean isFloorRequestAvailable() {
+        return getFloorRequests().isEmpty();
     }
 
     public ArrayList<FloorRequest> getFloorRequests() {
@@ -72,8 +91,17 @@ public class BuildingVisitor implements Serializable {
 
     // PUBLIC INTERFACE ***********************************************
 
+    public void enterFloor() {
+        this.buildingVisitorState = BuildingVisitorState.ON_FLOOR;
+    }
+
+    public void enterElevator() {
+        this.buildingVisitorState = BuildingVisitorState.IN_ELEVATOR;
+    }
+
     public void enterBuilding(int delay, int deviation) {
-        visitorAI.runVisitorEnteringSequence(delay, deviation);
+
+
     }
 
     public void exitBuilding() {
@@ -88,6 +116,7 @@ public class BuildingVisitor implements Serializable {
         floorRequest.setCurrentFloor(this.currentFloor);
         this.floorRequests.add(floorRequest);
     }
+
 
 }
 

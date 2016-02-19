@@ -6,6 +6,7 @@ import javafx.animation.Timeline;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Label;
 import javafx.util.Duration;
 
 import java.io.Serializable;
@@ -21,11 +22,13 @@ public class ElevatorSimulationGraph implements Serializable {
     private transient NumberAxis timeAxis;
     private BuildingScenario buildingScenario;
     private int maxY, xBounds;
-    private String visitorsInBuildingLabel;
+
+    private Label visitorsInBuildingLabel;
 
     private static ElevatorSimulationGraph simulationGraph = null;
 
     private transient Timeline timeline;
+    public int visitorCount = 0;
 
     private ElevatorSimulationGraph() {
 
@@ -48,6 +51,11 @@ public class ElevatorSimulationGraph implements Serializable {
 
         this.maxY = buildingScenario.getNumberOfFloors();
 
+
+    }
+
+    public void setVisitorsInBuildingLabel(Label visitorsInBuildingLabel) {
+        this.visitorsInBuildingLabel = visitorsInBuildingLabel;
     }
 
     //GETTERS ***********************************************
@@ -56,6 +64,9 @@ public class ElevatorSimulationGraph implements Serializable {
         return maxY;
     }
 
+    public Label getVisitorsInBuildingLabel() {
+        return visitorsInBuildingLabel;
+    }
     //PRIVATE IMPLEMENTATIONS ***********************************************
 
     private void setUpAxis() {
@@ -95,7 +106,11 @@ public class ElevatorSimulationGraph implements Serializable {
             int dt = startTime;
             int dy = currentFloor;
 
-            frames.add(new KeyFrame(Duration.seconds(startTime), event -> addChartData(dt, dy, elevatorID)));
+            frames.add(new KeyFrame(Duration.seconds(startTime), event -> {
+                addChartData(dt, dy, elevatorID);
+
+            }
+            ));
             System.out.println("Start Time" + (startTime) + " X: " + dt + " Y: " + dy + " Current Floor: " + currentFloor);
 
             if (dy < destinationFloor) {
@@ -109,6 +124,10 @@ public class ElevatorSimulationGraph implements Serializable {
         }
 
         return frames;
+    }
+
+    private void updateLabel() {
+
     }
 
     private void addChartData(int xPos, int yPos, int elevator) {
@@ -141,12 +160,12 @@ public class ElevatorSimulationGraph implements Serializable {
 
     //PUBLIC INTERFACE ***********************************************
 
-    public void setUpChart(LineChart lineChart, NumberAxis floorAxis, NumberAxis timeAxis, String visitorsInBuildingLabel) {
+    public void setUpChart(LineChart lineChart, NumberAxis floorAxis, NumberAxis timeAxis) {
 
         this.lineChart = lineChart;
         this.floorAxis = floorAxis;
         this.timeAxis = timeAxis;
-        this.visitorsInBuildingLabel = visitorsInBuildingLabel;
+
 
         lineChart.setCreateSymbols(false);
 
@@ -161,6 +180,19 @@ public class ElevatorSimulationGraph implements Serializable {
 
     public void stopTimeline() {
         timeline.stop();
+    }
+
+
+    public void update() {
+        visitorCount++;
+        System.out.println("updated: " + visitorCount);
+        visitorsInBuildingLabel.setText("" + visitorCount);
+
+    }
+
+    public void resetData() {
+        visitorCount = 0;
+        stopTimeline();
     }
 }
 

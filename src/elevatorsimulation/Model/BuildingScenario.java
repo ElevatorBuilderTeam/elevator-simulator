@@ -1,6 +1,7 @@
 package elevatorsimulation.Model;
 
 
+import elevatorsimulation.Model.AI.ElevatorAI;
 import elevatorsimulation.Model.AI.VisitorAI;
 
 import java.io.Serializable;
@@ -18,6 +19,10 @@ public class BuildingScenario implements Serializable {
     private Building building;
     private ArrayList<BuildingVisitor> buildingVisitors;
     private StringBuilder scenarioEntryText;
+    private ElevatorAI elevatorAI;
+    private VisitorAI visitorAI;
+
+
 
     public BuildingScenario(int numberOfPassengers, int numberOfFloors, int numberOfElevatorBanks, String scenarioName, ElevatorSimulationGraph elevatorSimulatorGraph) {
         this.numberOfPassengers = numberOfPassengers;
@@ -25,6 +30,9 @@ public class BuildingScenario implements Serializable {
         this.numberOfElevatorBanks = numberOfElevatorBanks;
 
         this.buildingVisitors = defaultVisitors(numberOfPassengers);
+        VisitorAI.getAI().addVisitors(buildingVisitors);
+
+
         building = new Building(numberOfFloors, numberOfElevatorBanks, buildingVisitors);
 
         //TODO This is a test that will be replaced later
@@ -57,10 +65,6 @@ public class BuildingScenario implements Serializable {
 
     //GETTERS ***********************************************
 
-    public ElevatorSimulationGraph getElevatorSimulatorGraph() {
-        return elevatorSimulatorGraph;
-    }
-
     public StringBuilder getScenarioEntryText() {
         return scenarioEntryText;
     }
@@ -69,28 +73,38 @@ public class BuildingScenario implements Serializable {
         return numberOfFloors;
     }
 
-    //PUBLIC INTERFACE ***********************************************
+    public Building getBuilding() {
+        return building;
+    }
+
+//PUBLIC INTERFACE ***********************************************
 
     public void runScenario() {
 
-        for (BuildingVisitor visitor : buildingVisitors) {
+        VisitorAI.getAI().runAISystems();
+        ElevatorAI.getAI().runAISystems();
 
-            //TODO: Set a number of floor requests, default is a random amount based on the number of floors the building has
+//        for (BuildingVisitor visitor : buildingVisitors) {
+//
+//            //TODO: Set a number of floor requests, default is a random amount based on the number of floors the building has
+//
+//            VisitorAI visitorAI = visitor.getVisitorAI();
+//
+//            visitorAI.setAmountOfFloorRequests(this.getNumberOfFloors());
+//            visitorAI.findRandomFloor();
+//            visitorAI.randomAverageTimeInBuilding(10);
+//            visitorAI.randomizeAverageTimeOnFloor(10, 4);
+//            visitorAI.randomizeEntryPoint();
+//
+//            visitor.enterBuilding(5, 4);
+//
+//
+//        }
+    }
 
-            VisitorAI visitorAI = visitor.getVisitorAI();
-
-            visitorAI.setAmountOfFloorRequests(this.getNumberOfFloors());
-            visitorAI.findRandomFloor();
-            visitorAI.randomAverageTimeInBuilding(10);
-            visitorAI.randomizeAverageTimeOnFloor(10, 4);
-            visitorAI.randomizeEntryPoint();
-            visitorAI.runVisitorEnteringSequence(10, 4);
-
-            visitor.enterBuilding(5, 4);
-
-
-
-        }
+    public void stopScenario() {
+        VisitorAI.getAI().stopAISystems();
+        // elevatorSimulatorGraph.resetGraph();
     }
 
 }

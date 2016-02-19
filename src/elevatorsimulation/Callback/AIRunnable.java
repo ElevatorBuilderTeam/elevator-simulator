@@ -6,4 +6,6 @@ package elevatorsimulation.Callback;
 public interface AIRunnable {
 
     void runAISystems();
+
+    void stopAISystems();
 }

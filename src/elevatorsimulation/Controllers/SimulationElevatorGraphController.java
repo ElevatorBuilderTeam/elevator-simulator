@@ -33,7 +33,8 @@ public class SimulationElevatorGraphController extends Controller implements Ini
     public void initWithParent(Controller controller) {
         super.initWithParent(controller);
         this.elevatorSimulationGraph = ElevatorSimulationGraph.getDefaultGraph();
-        this.elevatorSimulationGraph.setUpChart(elevatorLineChart, floorYaxis, timeXaxis, "");
+        this.elevatorSimulationGraph.setVisitorsInBuildingLabel(visitorInBuildingCount);
+        this.elevatorSimulationGraph.setUpChart(elevatorLineChart, floorYaxis, timeXaxis);
 
     }
 

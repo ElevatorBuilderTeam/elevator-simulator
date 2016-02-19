@@ -1,7 +1,6 @@
 package elevatorsimulation.Model;
 
 import elevatorsimulation.Exceptions.BuildingFloorValueNotFoundException;
-import elevatorsimulation.Model.AI.ElevatorAI;
 import elevatorsimulation.Model.Enums.ElevatorDirection;
 import elevatorsimulation.Model.Enums.ElevatorState;
 
@@ -19,7 +18,6 @@ public class Elevator implements Serializable {
     private ElevatorState elevatorState;
     private ElevatorDirection elevatorDirection;
     private ElevatorBank elevatorBank;
-    private ElevatorAI elevatorAI;
 
 
     private String identifier;
@@ -30,7 +28,6 @@ public class Elevator implements Serializable {
 
     public Elevator(ElevatorBank elevatorBank) {
         this.elevatorBank = elevatorBank;
-        this.elevatorAI = new ElevatorAI(this);
     }
 
     //GETTERS ***********************************************

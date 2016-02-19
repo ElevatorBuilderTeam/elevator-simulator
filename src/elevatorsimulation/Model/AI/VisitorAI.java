@@ -2,16 +2,15 @@ package elevatorsimulation.Model.AI;
 
 
 import elevatorsimulation.Callback.AIRunnable;
-import elevatorsimulation.Callback.CompletionHandler;
 import elevatorsimulation.Model.BuildingVisitor;
-import elevatorsimulation.Model.Elevator;
 import elevatorsimulation.Model.ElevatorSimulationGraph;
 import elevatorsimulation.Model.Enums.BuildingVisitorEntryPoint;
-import elevatorsimulation.Model.FloorRequest;
+import elevatorsimulation.Model.Enums.BuildingVisitorState;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.util.Duration;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -19,104 +18,89 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class VisitorAI implements AIRunnable {
 
-    Timer timer = new Timer();
+    ArrayList<Timeline> timelines = new ArrayList<>();
+
+    private int entranceDelay = 15;
 
     ElevatorSimulationGraph elevatorSimulationGraph;
-    BuildingVisitor buildingVisitor;
+    ArrayList<BuildingVisitor> buildingVisitors;
+    int numberOfVisitors = 0;
+
+    private static VisitorAI visitorAI = null;
 
 
-    //Inner Class that will provide a random timing mechanism
+    private VisitorAI() {
 
-    // *******************************************************
-    public class Task extends TimerTask {
-
-        int value;
-        int deviation;
-        int randomTime;
-        CompletionHandler completionHandler;
-
-
-        public Task(int value, int deviation, CompletionHandler handler) {
-            this.value = value;
-            this.deviation = deviation;
-            this.completionHandler = handler;
-            this.randomTime = randomNumberGeneration(value, deviation);
-        }
-
-        @Override
-        public void run() {
-
-            timer.schedule(new Task(value, deviation, completionHandler), randomTime);
-            completionHandler.completed();
-            //  System.out.println(new Date());
-        }
-    }
-// ***********************************************************
-    // end inner class
-
-    public VisitorAI(BuildingVisitor buildingVisitor) {
-        this.buildingVisitor = buildingVisitor;
         this.elevatorSimulationGraph = ElevatorSimulationGraph.getDefaultGraph();
-
-
     }
+
+    public static VisitorAI getAI() {
+        if (visitorAI == null) {
+            visitorAI = new VisitorAI();
+        }
+
+        return visitorAI;
+    }
+
+    private void enterBuilding() {
+
+        for (BuildingVisitor buildingVisitor : buildingVisitors) {
+            if (buildingVisitor.getBuildingVisitorState() == BuildingVisitorState.OUTSIDE_OF_BUILDING) {
+                //startFloorTimer
+                Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(randomNumberGeneration(entranceDelay, 1)), event -> {
+
+
+                }));
+
+                timeline.setOnFinished(actionEvent -> {
+                    buildingVisitor.setBuildingVisitorState(BuildingVisitorState.INSIDE_OF_BUILDING);
+
+                    System.out.println(buildingVisitor.getBuildingVisitorState());
+                });
+
+                timelines.add(timeline);
+            }
+        }
+
+
+        // Iterate through the visitors
+        //if the visitor is not on an elevator, visitor must be on floor
+    }
+
+    private void playAllTimelines() {
+        for (Timeline timeline : timelines) {
+            timeline.play();
+        }
+    }
+
+    private void stopAllTimelines() {
+        for (Timeline timeline : timelines) {
+            timeline.stop();
+        }
+    }
+
 
     private void waitOnFloor() {
 
-        //tempTime is the wait period the floor,
-        //we begin counting this down
-        int tempTime = buildingVisitor.getAverageTimeOnFloor();
-
-
-        timer.schedule(new TimerTask() {
-            // local reference
-            int i = tempTime;
-
-            @Override
-            public void run() {
-                i--;
-                // the timer ran out and there is an elevator available
-                if (i == 0 && floorRequestAvailable()) {
-
-
-                    // make cancel this process and request a floor
-                    timer.cancel();
-                }
-
-            }
-        }, 0, tempTime);
-
+        // timeline = new Timeline(new KeyFrame(Duration.seconds(buildingVisitor.getAverageTimeOnFloor())));
     }
 
     //PRIVATE IMPLEMENTATIONS ***********************************************
 
     private void populateFloorRequests() {
+        for (BuildingVisitor buildingVisitor : buildingVisitors) {
+            int randomFloor = findRandomFloor();
+            if (buildingVisitor.getFloorRequests().isEmpty()) {
+                System.out.println("New Visitor Added");
+                for (int i = 0; i < randomFloor; i++) {
 
-        int randomFloor = findRandomFloor();
-        if (this.buildingVisitor.getFloorRequests().isEmpty()) {
-            System.out.println("New Visitor Added");
-            for (int i = 0; i < randomFloor; i++) {
 
+                    System.out.println("Request: " + i + " out of: " + randomFloor);
+                    buildingVisitor.addToRequestQueue();
 
-                System.out.println("Request: " + i + " out of: " + randomFloor);
-                this.buildingVisitor.addToRequestQueue();
-
+                }
             }
         }
-    }
-
-    private Elevator getLastElevatorIndex() {
-        if (buildingVisitor.getFloorRequests().isEmpty()) {
-            System.out.println("empty requests");
-            return null;
-        }
-
-        FloorRequest request = buildingVisitor.getFloorRequests().get(buildingVisitor.getFloorRequests().size() - 1);
-        return request.callNextAvailableElevator(findRandomFloor());
-    }
-
-    private boolean floorRequestAvailable() {
-        return !buildingVisitor.getFloorRequests().isEmpty();
     }
 
     private int randomNumberGeneration(int value, int deviation) {
@@ -124,18 +108,11 @@ public class VisitorAI implements AIRunnable {
             System.out.println("Division By zero, run visitor entering sequence operation terminated");
             return 0;
         }
-        int min = (int) Duration.seconds(value - value / deviation).toMillis();
-        int max = (int) Duration.seconds(value + value / deviation).toMillis();
+        int min = value - value / deviation;
+        int max = value + value / deviation;
 
         return ThreadLocalRandom.current().nextInt((max - min) + 1);
     }
-
-    private void requestFloor() {
-
-
-        Elevator requestElevator = getLastElevatorIndex();
-    }
-
 
     //SETTERS ***********************************************
 
@@ -144,25 +121,36 @@ public class VisitorAI implements AIRunnable {
 
     }
 
-
     //PUBLIC INTERFACE ***********************************************
+
+
+    public void addVisitors(ArrayList<BuildingVisitor> buildingVisitors) {
+        this.buildingVisitors = buildingVisitors;
+    }
+
 
 
     @Override
     public void runAISystems() {
         // Populate floor requests
         populateFloorRequests();
-
+        enterBuilding();
+        playAllTimelines();
 
         // have visitors randomly enter the building
 
         //the visitors will begin making floor requests and move from floor to floor
+
         // the visitors will stay on a floor for a period of time
         // the visitors will then make another floor request until the 'N'
         //visitors will leave the building when floor requests are empty
-        buildingVisitor.exitBuilding();
         //
 
+    }
+
+    @Override
+    public void stopAISystems() {
+        stopAllTimelines();
     }
 
     public int findRandomFloor() {
@@ -179,41 +167,41 @@ public class VisitorAI implements AIRunnable {
 
     public void randomAverageTimeInBuilding(int averageTime) {
 
-        int randomNum = randomNumberGeneration(averageTime, 4);
-        buildingVisitor.setTimeInBuilding(randomNum);
+        for (BuildingVisitor buildingVisitor : buildingVisitors) {
+            buildingVisitor.setTimeInBuilding(randomNumberGeneration(averageTime, 4));
+        }
     }
 
 
     public void randomizeAverageTimeOnFloor(int averageTime, int deviation) {
 
-
-        int randomNum = randomNumberGeneration(averageTime, deviation);
-
-        buildingVisitor.setAverageTimeOnFloor(randomNum);
+        for (BuildingVisitor buildingVisitor : buildingVisitors) {
+            buildingVisitor.setAverageTimeOnFloor(randomNumberGeneration(averageTime, deviation));
+        }
     }
 
     public void randomizeEntryPoint() {
 
-        int randomNum = ThreadLocalRandom.current().nextInt();
 
-        if (randomNum % 2 == 0) {
+        for (BuildingVisitor buildingVisitor : buildingVisitors) {
+            int randomNum = ThreadLocalRandom.current().nextInt();
 
-            buildingVisitor.setBuildingVisitorEntryPoint(BuildingVisitorEntryPoint.GARAGE);
-            return;
+            if (randomNum % 2 == 0) {
+
+                buildingVisitor.setBuildingVisitorEntryPoint(BuildingVisitorEntryPoint.GARAGE);
+                return;
+            }
+
+            buildingVisitor.setBuildingVisitorEntryPoint(BuildingVisitorEntryPoint.LOBBY);
         }
-
-        buildingVisitor.setBuildingVisitorEntryPoint(BuildingVisitorEntryPoint.LOBBY);
     }
 
-    public void runVisitorEnteringSequence(int delay, int deviation) {
-        new Task(delay, deviation, () -> {
+    public void stopVisitorEnteringSquence(int delay, int deviation) {
 
-            runAISystems();
-            waitOnFloor();
-            requestFloor();
+    }
 
+    public static void runVisitorEnteringSequence(int delay, int deviation) {
 
-        }).run();
 
     }
 
