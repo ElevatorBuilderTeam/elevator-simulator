@@ -23,7 +23,7 @@ public class ElevatorSimulationGraph implements Serializable {
     private BuildingScenario buildingScenario;
     private int maxY, xBounds;
 
-    private Label visitorsInBuildingLabel;
+    private transient Label visitorsInBuildingLabel;
 
     private static ElevatorSimulationGraph simulationGraph = null;
 
@@ -126,9 +126,6 @@ public class ElevatorSimulationGraph implements Serializable {
         return frames;
     }
 
-    private void updateLabel() {
-
-    }
 
     private void addChartData(int xPos, int yPos, int elevator) {
 
@@ -186,6 +183,9 @@ public class ElevatorSimulationGraph implements Serializable {
     public void update() {
         visitorCount++;
         System.out.println("updated: " + visitorCount);
+        if (visitorsInBuildingLabel == null) {
+            return;
+        }
         visitorsInBuildingLabel.setText("" + visitorCount);
 
     }

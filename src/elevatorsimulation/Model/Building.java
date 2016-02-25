@@ -1,5 +1,6 @@
 package elevatorsimulation.Model;
 
+import elevatorsimulation.Model.AI.VisitorAI;
 import elevatorsimulation.Model.Enums.BuildingVisitorEntryPoint;
 
 import java.io.Serializable;
@@ -22,13 +23,28 @@ public class Building implements Serializable {
         populateBuildingFloors(numberOfFloors);
         populateElevatorBank(numberOfElevatorBanks);
         setEntryPointForBuildingVisitors(buildingVisitors);
+
+
     }
 
     // PRIVATE IMPLEMENTATIONS  ***********************************************
 
+
+    private void randomizeEntryPoint(BuildingVisitor buildingVisitor, int random) {
+        if (VisitorAI.getAI().randomNumberGeneration(random, 1) % 2 == 0) {
+            buildingVisitor.setBuildingVisitorEntryPoint(BuildingVisitorEntryPoint.GARAGE);
+
+        } else {
+            buildingVisitor.setBuildingVisitorEntryPoint(BuildingVisitorEntryPoint.LOBBY);
+        }
+    }
+
+
     private void setEntryPointForBuildingVisitors(ArrayList<BuildingVisitor> buildingVisitors) {
 
         for (BuildingVisitor visitor : buildingVisitors) {
+            // random value for the random size... change
+            randomizeEntryPoint(visitor, getBuildingFloors().size());
             if (visitor.getBuildingVisitorEntryPoint() == BuildingVisitorEntryPoint.GARAGE) {
                 visitor.setCurrentFloor(this.buildingFloors.get(0));
             } else {

@@ -65,6 +65,10 @@ public class BuildingVisitor implements Serializable {
     //GETTERS ***********************************************
 
 
+    public BuildingFloor getCurrentFloor() {
+        return currentFloor;
+    }
+
     public BuildingVisitorState getBuildingVisitorState() {
         return buildingVisitorState;
     }
@@ -113,7 +117,7 @@ public class BuildingVisitor implements Serializable {
     public void addToRequestQueue() {
         FloorRequest floorRequest = new FloorRequest(this.currentElevatorBank);
 
-        floorRequest.setCurrentFloor(this.currentFloor);
+
         this.floorRequests.add(floorRequest);
     }
 

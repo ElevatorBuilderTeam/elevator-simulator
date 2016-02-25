@@ -10,13 +10,14 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by Andrew on 2/14/2016.
  */
-public class VisitorAI implements AIRunnable {
+public class VisitorAI implements AIRunnable, Serializable {
 
     ArrayList<Timeline> timelines = new ArrayList<>();
 
@@ -55,13 +56,12 @@ public class VisitorAI implements AIRunnable {
                 timeline.setOnFinished(actionEvent -> {
                     buildingVisitor.setBuildingVisitorState(BuildingVisitorState.INSIDE_OF_BUILDING);
 
-                    System.out.println(buildingVisitor.getBuildingVisitorState());
+                    System.out.println(buildingVisitor.getBuildingVisitorState() + " Floor: " + buildingVisitor.getBuildingVisitorEntryPoint() + " number " + buildingVisitor.getCurrentFloor().getFloorLevel());
                 });
 
                 timelines.add(timeline);
             }
         }
-
 
         // Iterate through the visitors
         //if the visitor is not on an elevator, visitor must be on floor
@@ -78,7 +78,6 @@ public class VisitorAI implements AIRunnable {
             timeline.stop();
         }
     }
-
 
     private void waitOnFloor() {
 
@@ -103,7 +102,7 @@ public class VisitorAI implements AIRunnable {
         }
     }
 
-    private int randomNumberGeneration(int value, int deviation) {
+    public int randomNumberGeneration(int value, int deviation) {
         if (deviation == 0) {
             System.out.println("Division By zero, run visitor entering sequence operation terminated");
             return 0;
@@ -117,10 +116,19 @@ public class VisitorAI implements AIRunnable {
     //SETTERS ***********************************************
 
 
+    public void setEntranceDelay(int entranceDelay) {
+        this.entranceDelay = entranceDelay;
+    }
+
     public void setAmountOfFloorRequests(int amountOfFloorRequests) {
 
     }
 
+
+    //GETTERS ***********************************************
+    public int getEntranceDelay() {
+        return entranceDelay;
+    }
     //PUBLIC INTERFACE ***********************************************
 
 
