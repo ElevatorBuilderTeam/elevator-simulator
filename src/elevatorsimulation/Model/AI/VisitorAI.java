@@ -6,6 +6,7 @@ import elevatorsimulation.Model.BuildingVisitor;
 import elevatorsimulation.Model.ElevatorSimulationGraph;
 import elevatorsimulation.Model.Enums.BuildingVisitorEntryPoint;
 import elevatorsimulation.Model.Enums.BuildingVisitorState;
+import elevatorsimulation.Model.FloorRequest;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
@@ -20,6 +21,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class VisitorAI implements AIRunnable, Serializable {
 
     ArrayList<Timeline> timelines = new ArrayList<>();
+    ArrayList<Timeline> waitTimelines = new ArrayList<>();
 
     private int entranceDelay = 15;
 
@@ -67,13 +69,13 @@ public class VisitorAI implements AIRunnable, Serializable {
         //if the visitor is not on an elevator, visitor must be on floor
     }
 
-    private void playAllTimelines() {
+    private void playAllTimelines(ArrayList<Timeline> timelines) {
         for (Timeline timeline : timelines) {
             timeline.play();
         }
     }
 
-    private void stopAllTimelines() {
+    private void stopAllTimelines(ArrayList<Timeline> timelines) {
         for (Timeline timeline : timelines) {
             timeline.stop();
         }
@@ -81,7 +83,14 @@ public class VisitorAI implements AIRunnable, Serializable {
 
     private void waitOnFloor() {
 
-        // timeline = new Timeline(new KeyFrame(Duration.seconds(buildingVisitor.getAverageTimeOnFloor())));
+        for(BuildingVisitor visitor : buildingVisitors) {
+            waitTimelines.add(new Timeline(new KeyFrame(Duration.seconds(visitor.getAverageTimeOnFloor()), event -> {
+                // after we are finished waiting...
+                runVisitorLoop();
+
+            })));
+        }
+        playAllTimelines(waitTimelines);
     }
 
     //PRIVATE IMPLEMENTATIONS ***********************************************
@@ -100,6 +109,34 @@ public class VisitorAI implements AIRunnable, Serializable {
                 }
             }
         }
+    }
+
+
+
+
+    private void runVisitorLoop() {
+
+        for(BuildingVisitor visitor : buildingVisitors) {
+            if(visitor.isFloorRequestAvailable()) {
+             FloorRequest visitorRequest = visitor.getFloorRequests().get(visitor.getFloorRequests().size() -1 );
+                visitorRequest.callNextAvailableElevator(findRandomFloor());
+
+                stopAllTimelines(waitTimelines);
+                this.waitTimelines.remove(waitTimelines.size() - 1);
+                // remove the last time waiting and wait again.
+
+                waitOnFloor();
+
+            } else {
+                visitor.addToRequestQueue();
+                //ride the elevator back to the entrance of the entrance point
+                visitor.getFloorRequests().get(0).callNextAvailableElevator(visitor.getBuildingVisitorEntryPoint().hashCode());
+
+                visitor.exitBuilding();
+            }
+
+        }
+
     }
 
     public int randomNumberGeneration(int value, int deviation) {
@@ -143,8 +180,8 @@ public class VisitorAI implements AIRunnable, Serializable {
         // Populate floor requests
         populateFloorRequests();
         enterBuilding();
-        playAllTimelines();
-
+        playAllTimelines(timelines);
+        waitOnFloor();
         // have visitors randomly enter the building
 
         //the visitors will begin making floor requests and move from floor to floor
@@ -158,7 +195,7 @@ public class VisitorAI implements AIRunnable, Serializable {
 
     @Override
     public void stopAISystems() {
-        stopAllTimelines();
+        stopAllTimelines(timelines);
     }
 
     public int findRandomFloor() {

@@ -180,12 +180,19 @@ public class ElevatorSimulationGraph implements Serializable {
     }
 
 
-    public void update() {
-        visitorCount++;
+    public void update(boolean isEntering) {
+
+        if(isEntering) {
+            visitorCount++;
+        } else {
+            visitorCount--;
+        }
+
         System.out.println("updated: " + visitorCount);
         if (visitorsInBuildingLabel == null) {
             return;
         }
+
         visitorsInBuildingLabel.setText("" + visitorCount);
 
     }

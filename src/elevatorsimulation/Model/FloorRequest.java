@@ -29,7 +29,10 @@ public class FloorRequest implements Serializable {
     public Elevator callNextAvailableElevator(int floorDestination) {
 
 
-        return nextAvailableElevator = findAvailableElevator();
+        nextAvailableElevator = findAvailableElevator();
+
+        nextAvailableElevator.addDestination(floorDestination);
+        return nextAvailableElevator;
     }
 
       /*

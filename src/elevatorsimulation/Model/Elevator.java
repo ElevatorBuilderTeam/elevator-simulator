@@ -189,5 +189,6 @@ public class Elevator implements Serializable {
     }
 
 
-
+    public void addDestination(int floorDestination) {
+    }
 }

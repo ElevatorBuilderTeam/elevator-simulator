@@ -37,7 +37,7 @@ public class BuildingVisitor implements Serializable {
 
     public void setBuildingVisitorState(BuildingVisitorState buildingVisitorState) {
         this.buildingVisitorState = buildingVisitorState;
-        ElevatorSimulationGraph.getDefaultGraph().update();
+        ElevatorSimulationGraph.getDefaultGraph().update(true);
 
     }
 
@@ -103,13 +103,13 @@ public class BuildingVisitor implements Serializable {
         this.buildingVisitorState = BuildingVisitorState.IN_ELEVATOR;
     }
 
-    public void enterBuilding(int delay, int deviation) {
+    public void enterBuilding() {
 
 
     }
 
     public void exitBuilding() {
-
+        ElevatorSimulationGraph.getDefaultGraph().update(false);
     }
 
 
